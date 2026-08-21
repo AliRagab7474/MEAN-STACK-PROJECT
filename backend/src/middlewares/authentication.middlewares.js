@@ -36,11 +36,3 @@ export const authentication = (tokenType = "UserAccess") => {
   };
 };
 
-export const authorization = (accessRoles = []) => {
-  return async (req, res, next) => {
-    if (!accessRoles.includes(req.user.role)) {
-        throw UnauthorizedException({message:"missing authorization"})
-    }
-    next();
-  };
-};

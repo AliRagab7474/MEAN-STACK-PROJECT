@@ -21,7 +21,8 @@ const bootstrap = async () => {
 
   //routing
   app.use("/auth",authRouter)
-  app.use("/user",userRouter)
+  app.use("/user",userRouter) //user profile
+  
 
   //global error handling
   app.use(globalErrorHandling);

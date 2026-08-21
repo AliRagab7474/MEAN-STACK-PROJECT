@@ -70,4 +70,4 @@ userSchema
   });
 
 export const UserModel =
-  mongoose.model.User || mongoose.model("User", userSchema);
+  mongoose.models.User || mongoose.model("User", userSchema);
