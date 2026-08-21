@@ -54,7 +54,6 @@ const userSchema = new mongoose.Schema({
     toObject: { virtuals: true },
     toJSON: { virtuals: true },
     autoIndex: true,
-    versionKey: false,
   }
 )
 

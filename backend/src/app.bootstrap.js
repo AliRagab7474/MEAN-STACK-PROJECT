@@ -2,6 +2,7 @@ import express from "express";
 import { authRouter } from "./modules/auth/index.js";
 import { authenticateDB } from "./DB/index.js";
 import { globalErrorHandling } from "./utils/index.js";
+import { userRouter } from "./modules/user/index.js";
 
 const app = express();
 const port = 3000;
@@ -20,6 +21,9 @@ const bootstrap = async () => {
 
   //routing
   app.use("/auth",authRouter)
+
+  app.use("/user",userRouter) //user profile
+  
 
   //global error handling
   app.use(globalErrorHandling);
