@@ -19,10 +19,6 @@ export const getProfile = catchAsync(async(req,res,next)=>{
 
 export const deleteProfile = catchAsync(async(req,res,next)=>{
     const user = await UserModel.findByIdAndDelete(req.user._id)
-    if(!user){
-        return response.NotFoundException({message:"User Not Found.."})
-    }
-
     return response.successesResponse({res,message:"User Deleted Successfully"})
 })
 
@@ -87,7 +83,7 @@ export const shareProfile = catchAsync(async(req,res,next)=>{
 
  export const getSharedProfile = catchAsync(async (req, res, next) => {
     const { email } = req.params;
-    const user = await UserModel.findOne({email}).select("FirstName LastName Gender");
+    const user = await UserModel.findOne({email}).select("FirstName LastName Gender")
     if (!user) {
         return response.NotFoundException({message:"User Not Found"})
     }
