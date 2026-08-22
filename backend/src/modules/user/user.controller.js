@@ -8,7 +8,7 @@ import * as response from "../../utils/response/index.js";
 //GetProfile
 
 export const getProfile = catchAsync(async(req,res,next)=>{
-    const user = await UserModel.findById(req.user._id).select()
+    const user = await UserModel.findById(req.user._id)
     if(!user){
         return response.NotFoundException({message:"User Not Found"})
     }
@@ -42,7 +42,7 @@ export const blockUser = catchAsync(async(req,res,next)=>{
    if(user.status === StatusEnum.Blocked){
     return response.BadRequestException({message:"User Is Blocked Already"})
    }   
-   user.status = StatusEnum.Block ;
+   user.status = StatusEnum.Blocked ;
    await user.save();
    return response.successesResponse({res,message:"User Blocked Successfully",data:user})
 })
@@ -75,20 +75,20 @@ export const shareProfile = catchAsync(async(req,res,next)=>{
         return response.ErrorResponse({message:"You Can't Share Your Profile"})
     }
     
-    const sharedLink =  `http://localhost:3000/user/${user.email}/shareProfile`
+    const sharedLink =  `http://localhost:3000/user/${user._id}/shareProfile`
     
     return response.successesResponse({res,message:"Link Profile Is Ready",data:sharedLink})
 })
  //get shared profile
 
- export const getSharedProfile = catchAsync(async (req, res, next) => {
-    const { email } = req.params;
-    const user = await UserModel.findOne({email}).select("FirstName LastName Gender")
+export const getSharedProfile = catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const user = await UserModel.findById(id).select("FirstName LastName Gender _id status")
     if (!user) {
         return response.NotFoundException({message:"User Not Found"})
     }
     if (user.status === StatusEnum.Blocked) {
-        return response.ErrorResponse({message:"This profile is not available"})
+        return response.BadRequestException({message:"This profile is not available"})
     }
     return response.successesResponse({res,message: "Get Profile Successfully",data: { user },});
 });

@@ -58,6 +58,7 @@ export const login = async (req, res, next) => {
   const user = await findOne({
     model: UserModel,
     filter: { email },
+    select: "+password +ConfirmEmail"
   });
   if (!user) {
     return ConflictException({ message: "email not exist" });
@@ -98,6 +99,7 @@ export const ConfirmEmail = async (req, res, next) => {
   const user = await findOne({
     model: UserModel,
     filter: { email },
+    select: "+otp"
   });
 
   if (user.ConfirmEmail == true) {

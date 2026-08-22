@@ -10,7 +10,7 @@ router.get("/profile",authentication(),getProfile)
 router.delete("/deleteProfile",authentication(),deleteProfile)
 
 router.get("/shareProfile",authentication(),shareProfile)
-router.get("/:email/shareProfile",getSharedProfile)
+router.get("/:id/shareProfile",getSharedProfile)
 
 router.get("/getAllUsers",authentication(),authorization(RoleEnum.Admin),getAllUsers)
 router.patch("/:id/blockUser",authentication(),authorization(RoleEnum.Admin),blockUser)
