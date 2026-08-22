@@ -1,5 +1,5 @@
 import { UserModel } from "../../DB/models/user.model.js";
-import { catchAsync, RoleEnum } from "../../utils/index.js";
+import { catchAsync, RoleEnum , StatusEnum } from "../../utils/index.js";
 import * as response from "../../utils/response/index.js";
 
 //---------------------USER CONTROLLER
@@ -8,7 +8,7 @@ import * as response from "../../utils/response/index.js";
 //GetProfile
 
 export const getProfile = catchAsync(async(req,res,next)=>{
-    const user = await UserModel.findById(req.user._id)
+    const user = await UserModel.findById(req.user._id).select()
     if(!user){
         return response.NotFoundException({message:"User Not Found"})
     }
@@ -79,15 +79,15 @@ export const shareProfile = catchAsync(async(req,res,next)=>{
         return response.ErrorResponse({message:"You Can't Share Your Profile"})
     }
     
-    const sharedLink =  `http://localhost:3000/user/${user._id}/shareProfile`
+    const sharedLink =  `http://localhost:3000/user/${user.email}/shareProfile`
     
     return response.successesResponse({res,message:"Link Profile Is Ready",data:sharedLink})
 })
  //get shared profile
 
  export const getSharedProfile = catchAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const user = await UserModel.findById(id).select("Gender");
+    const { email } = req.params;
+    const user = await UserModel.findOne({email}).select("FirstName LastName Gender");
     if (!user) {
         return response.NotFoundException({message:"User Not Found"})
     }
