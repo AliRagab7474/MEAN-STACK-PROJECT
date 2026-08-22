@@ -1,5 +1,5 @@
 import joi from "joi";
-import { generalValidationFields } from "../../utils";
+import { generalValidationFields } from "../../utils/index.js";
 
 
 export const loginSchema = {

@@ -19,7 +19,13 @@ export const authentication = (tokenType = "UserAccess") => {
         message: "missing authentication or missing approach",
       });
     }
-        const decoded = jwt.verify(credentials, tokenSecrets[tokenType]);
+    
+    let decoded;
+    try {
+      decoded = jwt.verify(credentials, ADMIN_ACCESS_TOKEN_SECRET_KEY);
+    } catch {
+      decoded = jwt.verify(credentials, tokenSecrets[tokenType]);
+    }
 
         const user = await findById({
           model: UserModel,
