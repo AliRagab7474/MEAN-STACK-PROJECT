@@ -1,5 +1,5 @@
-export const emailTemplate = ({ code, title })=>{
-    return `<!DOCTYPE html>
+export const emailTemplate = ({ code, title }) => {
+  return `<!DOCTYPE html>
                 <html>
                 <head>
                     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></head>
@@ -45,36 +45,7 @@ export const emailTemplate = ({ code, title })=>{
                 </tr>
                 <tr>
                 <td>
-                <p style="margin:10px 0px 30px 0px;border-radius:4px;padding:10px 20px;border: 0;color:#fff;background-color:#630E2B; ">${code}</p>
-                </td>
-                </tr>
-                </table>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                <table border="0" width="100%" style="border-radius: 5px;text-align: center;">
-                <tr>
-                <td>
-                <h3 style="margin-top:10px; color:#000">Stay in touch</h3>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                <div style="margin-top:20px;">
-
-                <a href="${process.env.facebookLink}" style="text-decoration: none;"><span class="twit" style="padding:10px 9px;color:#fff;border-radius:50%;">
-                <img src="https://res.cloudinary.com/ddajommsw/image/upload/v1670703402/Group35062_erj5dx.png" width="50px" hight="50px"></span></a>
-                
-                <a href="${process.env.instegram}" style="text-decoration: none;"><span class="twit" style="padding:10px 9px;color:#fff;border-radius:50%;">
-                <img src="https://res.cloudinary.com/ddajommsw/image/upload/v1670703402/Group35063_zottpo.png" width="50px" hight="50px"></span>
-                </a>
-                
-                <a href="${process.env.twitterLink}" style="text-decoration: none;"><span class="twit" style="padding:10px 9px;;color:#fff;border-radius:50%;">
-                <img src="https://res.cloudinary.com/ddajommsw/image/upload/v1670703402/Group_35064_i8qtfd.png" width="50px" hight="50px"></span>
-                </a>
-
-                </div>
+                <p style="margin:20px 0px 30px 0px;border-radius:8px;padding:20px 40px;border: 0;color:#fff;background-color:#630E2B;font-size:42px;font-weight:bold;letter-spacing:8px;display:inline-block;">${code}</p>
                 </td>
                 </tr>
                 </table>
@@ -83,14 +54,4 @@ export const emailTemplate = ({ code, title })=>{
                 </table>
                 </body>
                 </html>`;
-}
-
-export const otpKey =({email , subject })=>{
-    return `OTP::USER::${email}::${subject}`
-}
-export const maxTrialKey =({email, subject})=>{
-    return `${otpKey({email , subject})}::MaxTrial`
-}
-export const blockedOtpKey =({email, subject})=>{
-    return `${otpKey({email,subject})}::Blocked`
-}
+};

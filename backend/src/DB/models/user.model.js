@@ -27,24 +27,32 @@ const userSchema = new mongoose.Schema(
       enum: Object.values(GenderEnum),
       default: GenderEnum.Male,
     },
-    role:{
+    age: {
+      type: Number,
+      minlength: [15, "age can not be under 15"],
+      maxlength: [60, "age can not be over 60"],
+    },
+    role: {
       type: String,
       enum: Object.values(RoleEnum),
       default: RoleEnum.User,
     },
-    status:{
-        type:String,
-        enum:Object.values(StatusEnum),
-        default:StatusEnum.Active
+    status: {
+      type: String,
+      enum: Object.values(StatusEnum),
+      default: StatusEnum.Active,
     },
-    token:{
-      type:String,
-      default:""
+    token: {
+      type: String,
+      default: "",
+    },
+    otp: {
+      type: String,
+      default: "",
     },
 
-    ConfirmEmail: Date,
+    ConfirmEmail: {type:Boolean,default:false},
     ChangeCredentialsTime: Date,
-
   },
   {
     collection: "App_Users",
@@ -61,9 +69,9 @@ const userSchema = new mongoose.Schema(
 userSchema
   .virtual("fullName")
   .set(function (value) {
-    const [ FirstName, LastName ] = value.split(" ");
-    this.FirstName = FirstName
-    this.LastName = LastName
+    const [FirstName, LastName] = value.split(" ");
+    this.FirstName = FirstName;
+    this.LastName = LastName;
   })
   .get(function () {
     return this.FirstName + " " + this.LastName;
