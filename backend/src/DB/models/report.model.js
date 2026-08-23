@@ -1,11 +1,11 @@
-import { reportActionEnum, reportStatusEnum } from "../../utils/enums";
+import { reportActionEnum, reportStatusEnum } from "../../utils/index.js";
 import mongoose  from 'mongoose';
 import { reportEnum }  from '../../utils/index.js';
 
 
 const reportSchema = new mongoose.Schema(
   {
-    message: {
+    messageId: {
       type: mongoose.Types.ObjectId,
       ref: 'Message',
       required: true,
@@ -49,4 +49,4 @@ const reportSchema = new mongoose.Schema(
 
 
 
-module.exports = mongoose.model('Report', reportSchema);
+export  const reportModel = mongoose.model('Report', reportSchema);

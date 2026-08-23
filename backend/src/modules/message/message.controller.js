@@ -119,8 +119,10 @@ export const getMessageById = catchAsync(async (req, res, next) => {
     model: MessageModel,
     filter: { _id: messageId },
   });
+
   if (!message) {
     return response.NotFoundException({ message: "message not found" });
   }
   return response.successesResponse({ res, data: message });
+  
 });
