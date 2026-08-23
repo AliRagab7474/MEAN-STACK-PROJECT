@@ -1,5 +1,5 @@
 import { UserModel } from "../../DB/models/user.model.js";
-import { catchAsync, RoleEnum } from "../../utils/index.js";
+import { catchAsync, RoleEnum , StatusEnum } from "../../utils/index.js";
 import * as response from "../../utils/response/index.js";
 
 //---------------------USER CONTROLLER
@@ -19,10 +19,6 @@ export const getProfile = catchAsync(async(req,res,next)=>{
 
 export const deleteProfile = catchAsync(async(req,res,next)=>{
     const user = await UserModel.findByIdAndDelete(req.user._id)
-    if(!user){
-        return response.NotFoundException({message:"User Not Found.."})
-    }
-
     return response.successesResponse({res,message:"User Deleted Successfully"})
 })
 
@@ -46,7 +42,7 @@ export const blockUser = catchAsync(async(req,res,next)=>{
    if(user.status === StatusEnum.Blocked){
     return response.BadRequestException({message:"User Is Blocked Already"})
    }   
-   user.status = StatusEnum.Block ;
+   user.status = StatusEnum.Blocked ;
    await user.save();
    return response.successesResponse({res,message:"User Blocked Successfully",data:user})
 })
@@ -85,14 +81,14 @@ export const shareProfile = catchAsync(async(req,res,next)=>{
 })
  //get shared profile
 
- export const getSharedProfile = catchAsync(async (req, res, next) => {
+export const getSharedProfile = catchAsync(async (req, res, next) => {
     const { id } = req.params;
-    const user = await UserModel.findById(id).select("Gender");
+    const user = await UserModel.findById(id).select("FirstName LastName Gender _id status")
     if (!user) {
         return response.NotFoundException({message:"User Not Found"})
     }
     if (user.status === StatusEnum.Blocked) {
-        return response.ErrorResponse({message:"This profile is not available"})
+        return response.BadRequestException({message:"This profile is not available"})
     }
     return response.successesResponse({res,message: "Get Profile Successfully",data: { user },});
 });

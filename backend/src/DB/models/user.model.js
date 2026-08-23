@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true , select : false},
     phone: { type: String },
     Gender: {
       type: String,
@@ -45,14 +45,15 @@ const userSchema = new mongoose.Schema(
     token: {
       type: String,
       default: "",
+      select : false
     },
     otp: {
       type: String,
       default: "",
+      select : false
     },
 
-    ConfirmEmail: {type:Boolean,default:false},
-    ChangeCredentialsTime: Date,
+    ConfirmEmail: {type:Boolean,default:false,select : false},
   },
   {
     collection: "App_Users",
