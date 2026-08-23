@@ -3,6 +3,7 @@ import { authRouter } from "./modules/auth/index.js";
 import { authenticateDB } from "./DB/index.js";
 import { globalErrorHandling } from "./utils/index.js";
 import { userRouter } from "./modules/user/index.js";
+import { messageRouter } from "./modules/message/index.js";
 
 const app = express();
 const port = 3000;
