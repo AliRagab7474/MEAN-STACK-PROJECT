@@ -1,1 +1,1 @@
-export {default as userRouter} from "./user.routing.js"
+export {default as messageRouter} from "./message.routing.js"

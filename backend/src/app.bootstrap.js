@@ -22,7 +22,7 @@ const bootstrap = async () => {
   //routing
   app.use("/auth",authRouter)
   app.use("/user",userRouter) //user profile
-  
+  app.use("/message",messageRouter)
 
   //global error handling
   app.use(globalErrorHandling);

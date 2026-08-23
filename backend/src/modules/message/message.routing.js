@@ -6,5 +6,5 @@ import { RoleEnum } from "../../utils/index.js";
 const router = express.Router();
 
 
-router.post("/:id/send-essage",authentication(),sendMessage)
+router.post("/:receiverId/send-message",authentication(),sendMessage)
 export default router
