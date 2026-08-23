@@ -23,5 +23,7 @@
 body {
   background: var(--bg-page);
   color: var(--text-dark);
- font-family: 'Cairo', system-ui, sans-serif;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  direction: ltr;
+  text-align: left;
 }

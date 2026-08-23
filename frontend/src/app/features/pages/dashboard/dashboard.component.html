@@ -1,30 +1,87 @@
 <div class="dashboard">
   @if (authService.currentUser(); as user) {
-    <h1>أهلًا، {{ user.FirstName }} 👋</h1>
-    <p class="subtitle">إيه اللي عايزة تعمليه دلوقتي؟</p>
-
-    <div class="cards">
-      <a routerLink="/profile" class="card">
-        <span class="icon">👤</span>
-        <h3>بروفايلك</h3>
-        <p>شوفي بياناتك أو احذفي حسابك</p>
-      </a>
-
-      <div class="card" (click)="copyShareLink()">
-        <span class="icon">🔗</span>
-        <h3>{{ copied ? 'اتنسخ الرابط ✓' : 'شارك بروفايلك' }}</h3>
-        <p>ابعتي الرابط لأصحابك يبعتولك رسائل</p>
+   
+    <header class="dash-header">
+      <div class="header-text">
+         <h1>Dashboard</h1>
+        <h3>Keep every anonymous message organized and searchable.</h3>
+        <p>
+          Manage your inbox and track your public page performance without revealing who's behind
+          each message.
+        </p>
       </div>
-
-      @if (user.role === 'Admin') {
-        <a routerLink="/admin/users" class="card admin-card">
-          <span class="icon">🛠️</span>
-          <h3>لوحة التحكم</h3>
-          <p>إدارة المستخدمين</p>
+      <div class="header-actions">
+        <a routerLink="/profile" class="btn btn-ghost">
+          <i class="fa-solid fa-sliders"></i> Settings
         </a>
-      }
-    </div>
+        <a [href]="shareLink() || '#'" target="_blank" class="btn btn-dark">
+          <i class="fa-solid fa-up-right-from-square"></i> Open public page
+        </a>
+      </div>
+    </header>
+    <section class="stats-row">
+      <div class="stat-card">
+        <span class="stat-label">Messages received</span>
+        <span class="stat-value">0</span>
+      </div>
+    </section>
+    <!-- 
+    <section class="trend-card">
+      <div class="trend-header">
+        <h4>Latest trend</h4>
+        <div class="trend-tabs">
+          <span class="trend-tab active"><i class="fa-solid fa-circle"></i> Messages received</span>
+          <span class="trend-tab"><i class="fa-solid fa-circle"></i> Profile visits</span>
+        </div>
+      </div>
+      <div class="trend-empty">
+        <p>Not enough data yet. Once people visit your profile and send messages, the chart will appear here.</p>
+      </div>
+    </section> -->
+
+    <section class="share-card">
+      <div class="share-info">
+        <h4><i class="fa-solid fa-link"></i> Share your public page</h4>
+        <span class="share-link">{{ shareLink() || 'sarhne.io/u/' + user.email }}</span>
+      </div>
+      <button class="btn btn-ghost" (click)="copyLink()">
+        <i class="fa-regular fa-copy"></i> {{ copied() ? 'Copied ✓' : 'Copy link' }}
+      </button>
+    </section>
+    <!-- 
+    <section class="messages-toolbar">
+      <button class="btn btn-primary search-btn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+      <input type="text" class="search-input" placeholder="Search message text..." disabled />
+    </section> -->
+
+    <section class="filters-row">
+      <span class="filter-pill active">All 0</span>
+      <span class="filter-pill">Unread 0</span>
+      <span class="filter-pill">Read 0</span>
+      <span class="filter-pill">Featured 0</span>
+      <span class="filter-pill">Pinned 0</span>
+      <span class="filter-pill">Archived 0</span>
+    </section>
+
+    <section class="messages-list">
+      <div class="empty-state">
+        <span class="empty-icon"><i class="fa-regular fa-envelope"></i></span>
+        <h4>Start collecting honest messages</h4>
+        <p>Visitors can already send you anonymous messages from your public page.</p>
+        <a [href]="shareLink() || '#'" target="_blank" class="btn btn-dark">
+          <i class="fa-solid fa-up-right-from-square"></i> Open public page
+        </a>
+      </div>
+    </section>
+
+    @if (user.role === 'Admin') {
+      <a routerLink="/admin/users" class="admin-banner">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>You're an admin — manage users from the admin panel</span>
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+    }
   } @else {
-    <p>بتحمل بياناتك...</p>
+    <p class="loading-text">Loading your data...</p>
   }
 </div>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserService } from '../../../core/services/user.service';
@@ -14,22 +14,38 @@ export class DashboardComponent implements OnInit {
   authService = inject(AuthService);
   private userService = inject(UserService);
 
-  copied = false;
+  shareLink = signal<string | null>(null);
+  copied = signal(false);
 
   ngOnInit(): void {
-   
     if (!this.authService.currentUser()) {
-      this.authService.loadCurrentUser().subscribe();
+      this.authService.loadCurrentUser().subscribe(() => this.buildShareLink());
+    } else {
+      this.buildShareLink();
     }
   }
 
-  copyShareLink(): void {
+
+  private buildShareLink(): void {
     this.userService.getShareableLink().subscribe({
-      next: async (link) => {
-        await navigator.clipboard.writeText(link);
-        this.copied = true;
-        setTimeout(() => (this.copied = false), 2000);
+      next: () => {
+        const email = this.authService.currentUser()?.email;
+        if (email) {
+          this.shareLink.set(`${window.location.origin}/u/${email}`);
+        }
       },
+      error: () => {
+       
+      },
+    });
+  }
+
+  copyLink(): void {
+    const link = this.shareLink();
+    if (!link) return;
+    navigator.clipboard.writeText(link).then(() => {
+      this.copied.set(true);
+      setTimeout(() => this.copied.set(false), 2000);
     });
   }
 }

@@ -36,7 +36,7 @@ export class ProfileComponent implements OnInit {
         this.shareError.set(false);
         if (navigator.share) {
           try {
-            await navigator.share({ title: 'صارحني', text: 'ابعتلي رسالة سرية 👀', url: link });
+            await navigator.share({ title: 'Sarhne', text: 'Send me an anonymous message 👀', url: link });
           } catch {}
         } else {
           await navigator.clipboard.writeText(link);

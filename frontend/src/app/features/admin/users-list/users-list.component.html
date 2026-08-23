@@ -1,16 +1,16 @@
 <div class="admin-panel">
-  <h2>إدارة المستخدمين</h2>
+  <h2>Manage Users</h2>
 
   @if (isLoading()) {
-    <p>بتحمل قائمة اليوزرز...</p>
+    <p>Loading users...</p>
   } @else {
     <table>
       <thead>
         <tr>
-          <th>الاسم</th>
-          <th>الإيميل</th>
-          <th>الدور</th>
-          <th>الحالة</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
           <th></th>
         </tr>
       </thead>
@@ -22,7 +22,7 @@
             <td>{{ u.role }}</td>
             <td>
               <span class="badge" [class.blocked]="u.status === 'Blocked'">
-                {{ u.status === 'Blocked' ? 'محظور' : 'نشط' }}
+                {{ u.status === 'Blocked' ? 'Blocked' : 'Active' }}
               </span>
             </td>
             <td>
@@ -34,7 +34,7 @@
                   [disabled]="processingId() === u._id"
                   (click)="toggleBlock(u)"
                 >
-                  {{ processingId() === u._id ? '...' : u.status === 'Blocked' ? 'فك الحظر' : 'حظر' }}
+                  {{ processingId() === u._id ? '...' : u.status === 'Blocked' ? 'Unblock' : 'Block' }}
                 </button>
               }
             </td>
