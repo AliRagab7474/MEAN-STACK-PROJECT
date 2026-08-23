@@ -1,5 +1,5 @@
 import express from "express";
-import { getProfile,getAllUsers, deleteProfile, blockUser, unBlockUser, shareProfile } from "./user.controller.js";
+import { getProfile,getAllUsers, deleteProfile, blockUser, unBlockUser, shareProfile, getSharedProfile } from "./user.controller.js";
 import { authorization } from "../../middlewares/authorization.js";
 import { authentication, } from "../../middlewares/authentication.middlewares.js";
 import { RoleEnum } from "../../utils/index.js";
