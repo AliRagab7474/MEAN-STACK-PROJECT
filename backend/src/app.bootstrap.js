@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { authRouter } from "./modules/auth/index.js";
 import { authenticateDB } from "./DB/index.js";
 import { globalErrorHandling } from "./utils/index.js";
@@ -12,6 +13,11 @@ const bootstrap = async () => {
   //global middleware
   app.use(express.json());
 
+
+  app.use(cors({
+  origin: "http://localhost:4200",
+  credentials: true
+}));
   //DB connection
   await authenticateDB();
 

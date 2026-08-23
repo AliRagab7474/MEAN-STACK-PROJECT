@@ -1,0 +1,37 @@
+@if (isLoading()) {
+  <p class="loading">بتحمل بياناتك...</p>
+} @else if (user(); as u) {
+  <div class="profile-card">
+    <img src="assets/default-avatar.png" alt="avatar" class="avatar" />
+    <h2>{{ u.FirstName }} {{ u.LastName }}</h2>
+    <p class="email">{{ u.email }}</p>
+    @if (u.status === 'Blocked') {
+      <p class="blocked-notice">حسابك محظور حاليًا</p>
+    }
+
+    <div class="actions">
+      <button class="btn share-btn" (click)="shareProfile()">
+        {{ copied() ? 'اتنسخ الرابط ✓' : 'شارك بروفايلك' }}
+      </button>
+      <button class="btn danger-btn" (click)="openDeleteConfirm()">حذف الحساب</button>
+    </div>
+
+    @if (shareError()) {
+      <p class="error-text">مقدرتيش تشاركي بروفايلك دلوقتي</p>
+    }
+  </div>
+
+  @if (showDeleteConfirm()) {
+    <div class="modal-overlay" (click)="cancelDelete()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <p>متأكدة إنك عايزة تمسحي حسابك؟ الخطوة دي مش هترجع.</p>
+        <div class="modal-actions">
+          <button class="btn" (click)="cancelDelete()">إلغاء</button>
+          <button class="btn danger-btn" (click)="confirmDelete()">تأكيد الحذف</button>
+        </div>
+      </div>
+    </div>
+  }
+} @else {
+  <p>حصل خطأ في تحميل بياناتك.</p>
+}

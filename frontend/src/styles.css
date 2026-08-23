@@ -1,1 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --blue-950: #0a1a3c;
+  --blue-900: #10285c;
+  --blue-800: #163a7a;
+  --blue-700: #1d4fa3;
+  --blue-600: #2563eb;
+  --blue-500: #3b82f6;
+  --blue-400: #60a5fa;
+  --blue-300: #93c5fd;
+  --blue-100: #dbeafe;
+  --blue-50: #eff6ff;
+
+  --bg-page: #f4f8ff;
+  --text-dark: #0f1f3d;
+  --text-muted: #5b6b8c;
+
+  --shadow-soft: 0 8px 30px rgba(29, 79, 163, 0.1);
+  --shadow-card: 0 4px 16px rgba(29, 79, 163, 0.08);
+  --radius-lg: 20px;
+  --radius-md: 14px;
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--text-dark);
+ font-family: 'Cairo', system-ui, sans-serif;
+}

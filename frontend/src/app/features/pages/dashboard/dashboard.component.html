@@ -1,0 +1,30 @@
+<div class="dashboard">
+  @if (authService.currentUser(); as user) {
+    <h1>أهلًا، {{ user.FirstName }} 👋</h1>
+    <p class="subtitle">إيه اللي عايزة تعمليه دلوقتي؟</p>
+
+    <div class="cards">
+      <a routerLink="/profile" class="card">
+        <span class="icon">👤</span>
+        <h3>بروفايلك</h3>
+        <p>شوفي بياناتك أو احذفي حسابك</p>
+      </a>
+
+      <div class="card" (click)="copyShareLink()">
+        <span class="icon">🔗</span>
+        <h3>{{ copied ? 'اتنسخ الرابط ✓' : 'شارك بروفايلك' }}</h3>
+        <p>ابعتي الرابط لأصحابك يبعتولك رسائل</p>
+      </div>
+
+      @if (user.role === 'Admin') {
+        <a routerLink="/admin/users" class="card admin-card">
+          <span class="icon">🛠️</span>
+          <h3>لوحة التحكم</h3>
+          <p>إدارة المستخدمين</p>
+        </a>
+      }
+    </div>
+  } @else {
+    <p>بتحمل بياناتك...</p>
+  }
+</div>

@@ -1,0 +1,82 @@
+.dashboard {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+.dashboard h1 {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  font-size: 15px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+  border-color: var(--blue-100);
+}
+
+.icon {
+  font-size: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--blue-100), var(--blue-50));
+  margin-bottom: 12px;
+}
+
+.card h3 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.card p {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+.admin-card {
+  background: linear-gradient(135deg, var(--blue-700), var(--blue-600));
+  color: #fff;
+}
+
+.admin-card h3,
+.admin-card p {
+  color: #fff;
+}
+
+.admin-card .icon {
+  background: rgba(255, 255, 255, 0.15);
+}

@@ -1,0 +1,46 @@
+<div class="admin-panel">
+  <h2>إدارة المستخدمين</h2>
+
+  @if (isLoading()) {
+    <p>بتحمل قائمة اليوزرز...</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>الاسم</th>
+          <th>الإيميل</th>
+          <th>الدور</th>
+          <th>الحالة</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (u of users(); track u._id) {
+          <tr>
+            <td>{{ u.FirstName }} {{ u.LastName }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.role }}</td>
+            <td>
+              <span class="badge" [class.blocked]="u.status === 'Blocked'">
+                {{ u.status === 'Blocked' ? 'محظور' : 'نشط' }}
+              </span>
+            </td>
+            <td>
+              @if (u.role !== 'Admin') {
+                <button
+                  class="btn"
+                  [class.unblock-btn]="u.status === 'Blocked'"
+                  [class.block-btn]="u.status !== 'Blocked'"
+                  [disabled]="processingId() === u._id"
+                  (click)="toggleBlock(u)"
+                >
+                  {{ processingId() === u._id ? '...' : u.status === 'Blocked' ? 'فك الحظر' : 'حظر' }}
+                </button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
