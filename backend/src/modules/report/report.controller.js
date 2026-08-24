@@ -69,3 +69,73 @@ export const reportMessage = catchAsync(async (req, res, next) => {
   });
 });
 
+export const patchReport = catchAsync(async (req, res, next) => {
+  const reportId = req.params.reportId;
+  const { status, actionTaken } = req.body || {};
+
+  const report = await findById({
+    model: reportModel,
+    id: reportId,
+  });
+
+  if (!report) {
+    return NotFoundException({ message: "report not found" });
+  }
+
+  const messageId = report.messageId;
+
+  const message = await findById({
+    model: MessageModel,
+    id: messageId,
+  });
+
+  if (!message) {
+    return NotFoundException({ message: "message not found" });
+  }
+  const userId = message.senderId;
+
+  const user = await findById({
+    model: UserModel,
+    id: userId,
+  });
+  if (!user) {
+    return NotFoundException({ message: "user not found" });
+  }
+
+  switch (actionTaken) {
+    case reportActionEnum.Message_Deleted:
+      await findOneAndDelete({
+        model: MessageModel,
+        filter: { _id: messageId },
+      });
+      report.actionTaken = reportActionEnum.Message_Deleted;
+      report.status = reportStatusEnum.Resolved;
+      await report.save();
+      return successesResponse({
+        res,
+        message: "report resolved , message deleted",
+        data: report,
+      });
+
+    case reportActionEnum.Sender_Banned:
+      report.actionTaken = reportActionEnum.Sender_Banned;
+      report.status = reportStatusEnum.Resolved;
+      await report.save();
+      user.status = StatusEnum.Blocked;
+      await user.save();
+      return successesResponse({
+        res,
+        message: "report resolved , sender banned",
+        data: report,
+      });
+
+    default:
+      report.status = status || reportStatusEnum.Dismissed;
+      await report.save();
+      return successesResponse({
+        res,
+        message: "report Dismissed",
+        data: report,
+      });
+  }
+});

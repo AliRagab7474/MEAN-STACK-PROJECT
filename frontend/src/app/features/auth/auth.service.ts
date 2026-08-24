@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import {
   SignupRequest,
   LoginRequest,
@@ -15,8 +16,7 @@ import {
 export class AuthService {
   private http = inject(HttpClient);
 
-  // الـ Proxy سيحول /auth تلقائياً إلى http://localhost:3000/auth
-  private baseUrl = '/auth';
+  private baseUrl = `${environment.apiUrl}/auth`;
 
   signup(data: SignupRequest): Observable<any> {
     return this.http.post(`${this.baseUrl}/signup`, data);

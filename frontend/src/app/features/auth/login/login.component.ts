@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -33,17 +33,15 @@ export class LoginComponent {
     this.errorMessage = '';
 
     this.authService.login(this.loginForm.value).subscribe({
-      next: (res) => {
+      next: () => {
         this.isLoading = false;
-        if (res.data) {
-          localStorage.setItem('token', res.data);
-          this.router.navigate(['/']);
-        }
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error?.message || 'An error occurred during login.';
+        this.errorMessage = err.error?.errorMessage || err.error?.message || 'An error occurred during login.';
       }
     });
   }
 }
+
