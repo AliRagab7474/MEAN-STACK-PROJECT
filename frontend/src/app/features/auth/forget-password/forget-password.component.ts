@@ -5,44 +5,43 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-forget-password',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
-  templateUrl: './login.component.html',
+  templateUrl: './forget-password.component.html',
   styleUrls: ['../auth-shared.css']
 })
-export class LoginComponent {
+export class ForgetPasswordComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  loginForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]]
+  forgetForm: FormGroup = this.fb.group({
+    email: ['', [Validators.required, Validators.email]]
   });
 
   isLoading = false;
   errorMessage = '';
+  successMessage = '';
 
   onSubmit() {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
+    if (this.forgetForm.invalid) {
+      this.forgetForm.markAllAsTouched();
       return;
     }
     this.isLoading = true;
     this.errorMessage = '';
+    this.successMessage = '';
 
-    this.authService.login(this.loginForm.value).subscribe({
+    this.authService.forgetPassword(this.forgetForm.value).subscribe({
       next: (res) => {
         this.isLoading = false;
-        if (res.data) {
-          localStorage.setItem('token', res.data);
-          this.router.navigate(['/']);
-        }
+        this.successMessage = 'OTP sent to your email successfully.';
+        setTimeout(() => this.router.navigate(['/reset-password']), 2000);
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error?.message || 'An error occurred during login.';
+        this.errorMessage = err.error?.message || 'Could not find this email address.';
       }
     });
   }

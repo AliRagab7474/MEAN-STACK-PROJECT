@@ -8,10 +8,10 @@
   --blue-400: #60a5fa;
   --blue-300: #93c5fd;
   --blue-100: #dbeafe;
-  --blue-50: #eff6ff;
+  --blue-50:  #eff6ff;
 
-  --bg-page: #f4f8ff;
-  --text-dark: #0f1f3d;
+  --bg-page:    #f4f8ff;
+  --text-dark:  #0f1f3d;
   --text-muted: #5b6b8c;
 
   --shadow-soft: 0 8px 30px rgba(29, 79, 163, 0.1);
@@ -20,10 +20,14 @@
   --radius-md: 14px;
 }
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background: var(--bg-page);
   color: var(--text-dark);
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  direction: ltr;
-  text-align: left;
+  font-family: 'Cairo', system-ui, sans-serif;
 }

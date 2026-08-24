@@ -5,44 +5,44 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-confirm-email',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
-  templateUrl: './login.component.html',
+  templateUrl: './confirm-email.component.html',
   styleUrls: ['../auth-shared.css']
 })
-export class LoginComponent {
+export class ConfirmEmailComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  loginForm: FormGroup = this.fb.group({
+  confirmForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]]
+    otp: ['', [Validators.required]]
   });
 
   isLoading = false;
   errorMessage = '';
+  successMessage = '';
 
   onSubmit() {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
+    if (this.confirmForm.invalid) {
+      this.confirmForm.markAllAsTouched();
       return;
     }
     this.isLoading = true;
     this.errorMessage = '';
+    this.successMessage = '';
 
-    this.authService.login(this.loginForm.value).subscribe({
+    this.authService.confirmEmail(this.confirmForm.value).subscribe({
       next: (res) => {
         this.isLoading = false;
-        if (res.data) {
-          localStorage.setItem('token', res.data);
-          this.router.navigate(['/']);
-        }
+        this.successMessage = 'Email confirmed successfully! Redirecting to login...';
+        setTimeout(() => this.router.navigate(['/login']), 2000);
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error?.message || 'An error occurred during login.';
+        this.errorMessage = err.error?.message || 'Invalid OTP or an error occurred.';
       }
     });
   }

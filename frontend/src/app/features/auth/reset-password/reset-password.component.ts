@@ -5,29 +5,27 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
 
 @Component({
-  selector: 'app-signup',
+  selector: 'app-reset-password',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
-  templateUrl: './signup.component.html',
+  templateUrl: './reset-password.component.html',
   styleUrls: ['../auth-shared.css']
 })
-export class SignupComponent {
+export class ResetPasswordComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  signupForm: FormGroup = this.fb.group({
-    fullName: ['', [Validators.required]],
+  resetForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required]],
-    age: ['', [Validators.required, Validators.min(10)]],
-    gender: ['', [Validators.required]],
+    otp: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', [Validators.required]]
   }, { validators: this.passwordMatchValidator });
 
   isLoading = false;
   errorMessage = '';
+  successMessage = '';
 
   passwordMatchValidator(control: AbstractControl) {
     const password = control.get('password')?.value;
@@ -40,21 +38,23 @@ export class SignupComponent {
   }
 
   onSubmit() {
-    if (this.signupForm.invalid) {
-      this.signupForm.markAllAsTouched();
+    if (this.resetForm.invalid) {
+      this.resetForm.markAllAsTouched();
       return;
     }
     this.isLoading = true;
     this.errorMessage = '';
+    this.successMessage = '';
 
-    this.authService.signup(this.signupForm.value).subscribe({
+    this.authService.resetPassword(this.resetForm.value).subscribe({
       next: (res) => {
         this.isLoading = false;
-        this.router.navigate(['/confirm-email']); 
+        this.successMessage = 'Password reset successfully! Redirecting to login...';
+        setTimeout(() => this.router.navigate(['/login']), 2000);
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error?.message || 'An error occurred during registration. Please try again.';
+        this.errorMessage = err.error?.message || 'An error occurred while resetting the password. Check your data.';
       }
     });
   }

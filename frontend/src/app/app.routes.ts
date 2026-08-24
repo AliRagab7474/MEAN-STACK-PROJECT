@@ -1,54 +1,15 @@
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard } from './core/guards/auth.guard';
-import { adminGuard } from './core/guards/admin.guard';
+import { LoginComponent } from './features/auth/login/login.component';
+import { SignupComponent } from './features/auth/signup/signup.component';
+import { ConfirmEmailComponent } from './features/auth/confirm-email/confirm-email.component';
+import { ForgetPasswordComponent } from './features/auth/forget-password/forget-password.component';
+import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    loadComponent: () =>
-      import('./features/pages/home/home.component').then((m) => m.HomeComponent),
-  },
-  {
-    path: 'login',
-    canActivate: [guestGuard],
-    loadComponent: () =>
-      import('./features/auth/login/login.component').then((m) => m.LoginComponent),
-  },
-  {
-    path: 'signup',
-    canActivate: [guestGuard],
-    loadComponent: () =>
-      import('./features/auth/signup/signup.component').then((m) => m.SignupComponent),
-  },
-  {
-    path: 'dashboard',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/pages/dashboard/dashboard.component').then((m) => m.DashboardComponent),
-  },
-  {
-    path: 'profile',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/profile/profile.component').then((m) => m.ProfileComponent),
-  },
-  {
-    path: 'admin/users',
-    canActivate: [authGuard, adminGuard],
-    loadComponent: () =>
-      import('./features/admin/users-list/users-list.component').then(
-        (m) => m.UsersListComponent
-      ),
-  },
-  {
-    path: 'u/:email',
-    loadComponent: () =>
-      import('./features/send-message/send-message.component').then(
-        (m) => m.SendMessageComponent
-      ),
-  },
-  {
-    path: '**',
-    redirectTo: '',
-  },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'confirm-email', component: ConfirmEmailComponent },
+  { path: 'forget-password', component: ForgetPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent }
 ];
