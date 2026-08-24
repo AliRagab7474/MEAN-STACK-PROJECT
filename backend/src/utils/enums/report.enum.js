@@ -14,6 +14,6 @@ export const reportStatusEnum = {
 
 export const reportActionEnum = {
   None: "none",
-  Message_Deleted: "message_deleted",
-  Sender_Banned: "sender_banned",
+  Message_Deleted: "message deleted",
+  Sender_Banned: "sender banned",
 };

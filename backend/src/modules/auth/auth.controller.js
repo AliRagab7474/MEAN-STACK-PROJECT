@@ -8,6 +8,7 @@ import { sendEmail } from "../../utils/email/index.js";
 import { emailTemplate } from "../../utils/email/index.js";
 import {
   BadRequestException,
+  catchAsync,
   compareHash,
   ConflictException,
   createNumberOtp,
@@ -19,7 +20,7 @@ import {
 } from "../../utils/index.js";
 import jwt from "jsonwebtoken";
 
-export const signup = async (req, res, next) => {
+export const signup = catchAsync(async (req, res, next) => {
   const { fullName, email, password, phone, age, gender } = req.body;
   const checkUserExist = await findOne({
     model: UserModel,
@@ -51,9 +52,9 @@ export const signup = async (req, res, next) => {
   });
 
   return successesResponse({ res, data: user, status: 201 });
-};
+});
 
-export const login = async (req, res, next) => {
+export const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   const user = await findOne({
     model: UserModel,
@@ -92,14 +93,14 @@ export const login = async (req, res, next) => {
   user.save();
 
   return successesResponse({ res, data: token, status: 201 });
-};
+});
 
-export const ConfirmEmail = async (req, res, next) => {
+export const ConfirmEmail = catchAsync(async (req, res, next) => {
   const { otp, email } = req.body;
   const user = await findOne({
     model: UserModel,
     filter: { email },
-    select: "+otp"
+    select: "+otp +ConfirmEmail"
   });
 
   if (user.ConfirmEmail == true) {
@@ -117,13 +118,14 @@ export const ConfirmEmail = async (req, res, next) => {
     res,
     message: "email confirmed , you can login now",
   });
-};
+});
 
-export const forgetPassword = async (req, res, next) => {
+export const forgetPassword = catchAsync(async (req, res, next) => {
   const { email } = req.body;
   const user = await findOne({
     model: UserModel,
     filter: { email },
+    select: "+otp"
   });
 
   if (!user) {
@@ -143,15 +145,21 @@ export const forgetPassword = async (req, res, next) => {
     res,
     message: "otp sent",
   });
-};
+});
 
-export const resetPassword = async (req, res, next) => {
+export const resetPassword = catchAsync(async (req, res, next) => {
   const { email,otp ,password,confirmPassword } = req.body;
 
   const user = await findOne({
     model:UserModel,
-    filter:{email}
+    filter:{email},
+    select:"+otp +password"
   })
+
+  if (!user) {
+    return NotFoundException({ res, message: "email not found" });
+  }
+
   if (password !=confirmPassword) {
     return BadRequestException({res,message:"password and confirmPassword not identical"})
   }
@@ -172,6 +180,6 @@ export const resetPassword = async (req, res, next) => {
     res,
     message: "done password reset",
   });
-};
+});
 
 
