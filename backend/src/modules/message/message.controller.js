@@ -16,7 +16,7 @@ export const sendMessage = catchAsync(async (req, res, next) => {
     return response.NotFoundException({ message: "User Not Found" });
   }
 
-  if (receiver.status === StatusEnum.Blocked) {
+  if (senderId.status === StatusEnum.Blocked) {
     return response.BadRequestException({
       message: "You Can Not Send Message(you are blocked)",
     });

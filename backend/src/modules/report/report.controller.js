@@ -69,6 +69,8 @@ export const reportMessage = catchAsync(async (req, res, next) => {
   });
 });
 
+
+//Update Report
 export const patchReport = catchAsync(async (req, res, next) => {
   const reportId = req.params.reportId;
   const { status, actionTaken } = req.body || {};
@@ -139,3 +141,34 @@ export const patchReport = catchAsync(async (req, res, next) => {
       });
   }
 });
+
+//get all report ------------- ADMIN      
+
+export const getReports = catchAsync(async(req,res,next)=> {
+    const reports = await reportModel.find().populate("reportedBy" ,"FirstName LastName ")
+    .populate("messageId","content").select("_id reason status")
+    if(reports.length === 0){
+            return response.NotFoundException({message:"No Reports Founded"})
+        }
+
+    //if m or u deleted 
+    const data = reports.map(report => ({...report.toObject(),
+    messageId: report.messageId ? report.messageId : "Message Deleted",
+    reportedBy: report.reportedBy ? report.reportedBy: "User Deleted"
+    }));
+    return response.successesResponse({res,message:"All Reports",data:data})
+})
+
+
+//get report by ID ---------------ADMIN   :id/getReport
+
+export const getReport = catchAsync(async(req,res,next)=> {
+    const {reportId} = req.params;
+    const report = await reportModel.findById(reportId).populate("reportedBy", "FirstName LastName email")
+    .populate("messageId", "content senderId receiverId createdAt")
+    .select("_id messageId reportedBy reason status")
+    if(!report){
+     return NotFoundException({message:"report not found"})
+    }
+     return successesResponse({res,message:"Details Of The Report",data:report})
+})
