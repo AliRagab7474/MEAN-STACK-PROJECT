@@ -1,5 +1,5 @@
 import { UserModel } from "../../DB/models/user.model.js";
-import { catchAsync, RoleEnum , StatusEnum } from "../../utils/index.js";
+import { catchAsync, Decrypt, RoleEnum , StatusEnum } from "../../utils/index.js";
 import * as response from "../../utils/response/index.js";
 
 //---------------------USER CONTROLLER
