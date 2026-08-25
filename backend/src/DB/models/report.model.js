@@ -49,4 +49,4 @@ const reportSchema = new mongoose.Schema(
 
 
 
-export  const reportModel = mongoose.model('Report', reportSchema);
+export  const reportModel = mongoose.models.Report || mongoose.model('Report', reportSchema);

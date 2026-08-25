@@ -12,6 +12,7 @@ export const getProfile = catchAsync(async(req,res,next)=>{
     if(!user){
         return response.NotFoundException({message:"User Not Found"})
     }
+    user.phone = await Decrypt(user.phone);
     return response.successesResponse({res,message:"Success",data:user})
 })
 
