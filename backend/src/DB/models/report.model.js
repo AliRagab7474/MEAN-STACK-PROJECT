@@ -32,13 +32,13 @@ const reportSchema = new mongoose.Schema(
     status: {
       type: String,
       enum:Object.values(reportStatusEnum),
-      default: 'pending',
+      default: reportStatusEnum.Pending,
     },
 
     actionTaken: {
       type: String,
       enum:Object.values(reportActionEnum),
-      default: 'none',
+      default: reportActionEnum.None,
     },
   },
   {
