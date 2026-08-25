@@ -11,40 +11,45 @@ const app = express();
 const port = 3000;
 
 const bootstrap = async () => {
-  //global middleware
-  app.use(express.json());
+  try {
+    //DB connection
+    await authenticateDB();
 
+    //global middleware
+    app.use(express.json());
 
-  app.use(cors({
-  origin: "http://localhost:4200",
-  credentials: true
-}));
-  //DB connection
-  await authenticateDB();
+    app.use(cors({
+      origin: "http://localhost:4200",
+      credentials: true
+    }));
 
-  //global routing
-  app.get("/", (req, res, next) => {
-    return res.json({ message: "landing page" });
-  });
+    //global routing
+    app.get("/", (req, res, next) => {
+      return res.json({ message: "landing page" });
+    });
 
-  //routing
-  app.use("/auth",authRouter)
-  app.use("/user",userRouter) //user profile
-  app.use("/message",messageRouter)
-  app.use("/report",reportRouter)
+    //routing
+    app.use("/auth", authRouter);
+    app.use("/user", userRouter); //user profile
+    app.use("/message", messageRouter);
+    app.use("/report", reportRouter);
 
-  //global error handling
-  app.use(globalErrorHandling);
+    //global error handling
+    app.use(globalErrorHandling);
 
-  //dummy routing
-  app.get("/{*path}", (req, res, next) => {
-    return res.status(404).json({ message: "invalid routing" });
-  });
+    //dummy routing
+    app.get("/{*path}", (req, res, next) => {
+      return res.status(404).json({ message: "invalid routing" });
+    });
 
-  //listener
-  app.listen(port, () => {
-    console.log(`server is running on port ${port}`);
-  });
+    //listener
+    app.listen(port, () => {
+      console.log(`server is running on port ${port}`);
+    });
+  } catch (error) {
+    console.error("Database connection failed. Server will not run:", error.message || error);
+    process.exit(1);
+  }
 };
 
 export default bootstrap;

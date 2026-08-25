@@ -1,7 +1,7 @@
-import { BadRequestException } from "../utils/index.js";
+import { BadRequestException, catchAsync } from "../utils/index.js";
 
 export const validation = (schema) => {
-  return async (req, res, next) => {
+  return catchAsync(async (req, res, next) => {
 
     let errors = []
      for (const key of Object.keys(schema)) {
@@ -15,5 +15,5 @@ export const validation = (schema) => {
     }
    
     next()
-  };
+  });
 };
