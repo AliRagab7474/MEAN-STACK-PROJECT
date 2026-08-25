@@ -25,7 +25,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-
   private buildShareLink(): void {
     this.userService.getShareableLink().subscribe({
       next: () => {
@@ -34,9 +33,7 @@ export class DashboardComponent implements OnInit {
           this.shareLink.set(`${window.location.origin}/u/${email}`);
         }
       },
-      error: () => {
-       
-      },
+      error: () => {},
     });
   }
 
@@ -47,5 +44,9 @@ export class DashboardComponent implements OnInit {
       this.copied.set(true);
       setTimeout(() => this.copied.set(false), 2000);
     });
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }

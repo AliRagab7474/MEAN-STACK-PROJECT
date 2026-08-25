@@ -1,3 +1,15 @@
+<nav class="app-navbar">
+  <a routerLink="/" class="navbar-logo">Sarhne</a>
+  <div class="navbar-links">
+    <a routerLink="/" class="nav-link">
+      <i class="fa-solid fa-house"></i> Home
+    </a>
+    <button class="nav-link logout-link" type="button" (click)="logout()">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+    </button>
+  </div>
+</nav>
+
 <div class="dashboard">
   @if (authService.currentUser(); as user) {
    
