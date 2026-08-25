@@ -1,6 +1,7 @@
 import {
   create,
   deleteOne,
+  find,
   findById,
   findByIdAndUpdate,
   findOne,
@@ -69,11 +70,10 @@ export const reportMessage = catchAsync(async (req, res, next) => {
   });
 });
 
-
 //Update Report
 export const patchReport = catchAsync(async (req, res, next) => {
   const reportId = req.params.reportId;
-  const { status, actionTaken } = req.body || {};
+  const { actionTaken } = req.body || {};
 
   const report = await findById({
     model: reportModel,
@@ -136,7 +136,7 @@ export const patchReport = catchAsync(async (req, res, next) => {
       });
 
     default:
-      report.status = status || reportStatusEnum.Dismissed;
+      report.status = reportStatusEnum.Dismissed;
       await report.save();
       return successesResponse({
         res,
@@ -146,39 +146,66 @@ export const patchReport = catchAsync(async (req, res, next) => {
   }
 });
 
-//get all report ------------- ADMIN      
+//get all report ------------- ADMIN
 
-export const getReports = catchAsync(async(req,res,next)=> {
-    const reports = await reportModel.find().populate("reportedBy" ,"FirstName LastName ")
-    .populate("messageId","content").select("_id reason status")
-    if(reports.length === 0){
-            return NotFoundException({message:"No Reports Founded"})
-        }
+export const getReports = catchAsync(async (req, res, next) => {
+  const reports = await reportModel
+    .find()
+    .populate("reportedBy", "FirstName LastName ")
+    .populate("messageId", "content")
+    .select("_id reason status");
+  if (reports.length === 0) {
+    return NotFoundException({ message: "No Reports Founded" });
+  }
 
-    //if m or u deleted 
-    const data = reports.map(report => ({...report.toObject(),
+  //if m or u deleted
+  const data = reports.map((report) => ({
+    ...report.toObject(),
     messageId: report.messageId ? report.messageId : "Message Deleted",
-    reportedBy: report.reportedBy ? report.reportedBy: "User Deleted"
-    }));
-    return successesResponse({res,message:"All Reports",data:data})
-})
-
+    reportedBy: report.reportedBy ? report.reportedBy : "User Deleted",
+  }));
+  return successesResponse({ res, message: "All Reports", data: data });
+});
 
 //get report by ID ---------------ADMIN   :id/getReport
 
-export const getReport = catchAsync(async(req,res,next)=> {
-    const {reportId} = req.params;
-    const report = await reportModel.findById(reportId).populate("reportedBy", "FirstName LastName email")
+export const getReport = catchAsync(async (req, res, next) => {
+  const { reportId } = req.params;
+  const report = await reportModel
+    .findById(reportId)
+    .populate("reportedBy", "FirstName LastName email")
     .populate("messageId", "content senderId receiverId createdAt")
-    .select("_id messageId reportedBy reason status")
-    if(!report){
-     return NotFoundException({message:"Report Not Found"})
-    }
+    .select("_id messageId reportedBy reason status");
+  if (!report) {
+    return NotFoundException({ message: "Report Not Found" });
+  }
 
-    //if m or u deleted 
-    const data = report.map(report => ({...report.toObject(),
+  //if m or u deleted
+  const data = report.map((report) => ({
+    ...report.toObject(),
     messageId: report.messageId ? report.messageId : "Message Deleted",
-    reportedBy: report.reportedBy ? report.reportedBy: "User Deleted"
-    }));
-     return successesResponse({res,message:"Details Of The Report",data:data})
-})
+    reportedBy: report.reportedBy ? report.reportedBy : "User Deleted",
+  }));
+  return successesResponse({
+    res,
+    message: "Details Of The Report",
+    data: data,
+  });
+});
+
+export const getMyReports = catchAsync(async (req, res, next) => {
+  const userId = req.user._id;
+  const report = await find({
+    model:reportModel,
+    filter: { reportedBy: userId },
+    select:"status actionTaken messageId"
+  });
+  if (!report) {
+    return NotFoundException({ message: "you have no reports" });
+  }
+  return successesResponse({
+    res,
+    message: "Details Of your Reports",
+    data: report,
+  });
+});
