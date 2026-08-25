@@ -26,7 +26,7 @@ export const deleteProfile = catchAsync(async(req,res,next)=>{
 
 //get all users
 export const getAllUsers = catchAsync(async(req,res,next)=>{
-    const users = await UserModel.find()
+    const users = await UserModel.find().select("FirstName LastName email Gender role status _id")
     if(users.length === 0){
         return response.NotFoundException({message:"Users Not Found"})
     }
@@ -87,8 +87,8 @@ export const getSharedProfile = catchAsync(async (req, res, next) => {
     if (!user) {
         return response.NotFoundException({message:"User Not Found"})
     }
-    if (user.status === StatusEnum.Blocked) {
-        return response.BadRequestException({message:"This profile is not available"})
-    }
+    // if (user.status === StatusEnum.Blocked) {
+    //     return response.BadRequestException({message:"This profile is not available"})
+    // }
     return response.successesResponse({res,message: "Get Profile Successfully",data: { user },});
 });
