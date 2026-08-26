@@ -8,8 +8,8 @@ const router = express.Router();
 
 router.post("/:receiverId/send-message",authentication(),sendMessage)
 router.get("/received-messages",authentication(),getMessageReceived)
-router.get("/sended-messages",authentication(),getMessageSended)
+// router.get("/sended-messages",authentication(),getMessageSended)
 router.delete("/:messageId/delete-message",authentication(),deleteMessage)
-router.get("/:messageId",authentication(),authorization(RoleEnum.Admin),getMessageById)
+// router.get("/:messageId",authentication(),authorization(RoleEnum.Admin),getMessageById)
 
 export default router
