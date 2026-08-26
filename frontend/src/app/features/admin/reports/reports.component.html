@@ -1,0 +1,54 @@
+<main class="reports-panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Administration</p>
+      <h1>Message reports</h1>
+    </div>
+    <a routerLink="/dashboard" class="back-link"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
+  </div>
+
+  @if (isLoading()) {
+    <p class="state">Loading reports...</p>
+  } @else if (reports().length === 0) {
+    <p class="state">No reports found.</p>
+  } @else {
+    <div class="report-grid">
+      @for (report of reports(); track report._id) {
+        <article class="report-card">
+          <div class="report-topline">
+            <span class="reason"><i class="fa-solid fa-flag"></i> {{ report.reason }}</span>
+            <span class="status" [class.resolved]="report.status !== 'pending'">{{ report.status }}</span>
+          </div>
+          <p class="message">{{ messageContent(report) }}</p>
+          <p class="reporter">Reported by {{ reporterName(report) }}</p>
+          <div class="report-actions">
+            <button type="button" class="details-btn" (click)="viewDetails(report)">Details</button>
+            @if (report.status === 'pending') {
+              <button type="button" class="dismiss-btn" [disabled]="processingId() === report._id" (click)="resolve(report, 'dismissed')">Dismiss</button>
+              <button type="button" class="delete-btn" [disabled]="processingId() === report._id" (click)="resolve(report, 'message deleted')">Delete message</button>
+              <button type="button" class="ban-btn" [disabled]="processingId() === report._id" (click)="resolve(report, 'sender banned')">Ban sender</button>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  }
+
+  @if (selectedReport(); as report) {
+    <div class="modal-overlay" (click)="closeDetails()">
+      <section class="modal" (click)="$event.stopPropagation()">
+        <h2>Report details</h2>
+        <p><strong>Reason:</strong> {{ report.reason }}</p>
+        <p><strong>Status:</strong> {{ report.status }}</p>
+        <p><strong>Description:</strong> {{ report.description || 'No description' }}</p>
+        @if (report.status === 'pending') {
+          <div class="modal-actions">
+            <button type="button" class="dismiss-btn" (click)="resolve(report, 'dismissed')">Dismiss</button>
+            <button type="button" class="delete-btn" (click)="resolve(report, 'message deleted')">Delete message</button>
+            <button type="button" class="ban-btn" (click)="resolve(report, 'sender banned')">Ban sender</button>
+          </div>
+        }
+      </section>
+    </div>
+  }
+</main>

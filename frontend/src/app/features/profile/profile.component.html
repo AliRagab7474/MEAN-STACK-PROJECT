@@ -32,6 +32,40 @@
     }
   </div>
 
+  <section class="reports-section">
+    <div class="reports-heading">
+      <h3><i class="fa-solid fa-flag"></i> Reports</h3>
+      <span>{{ reports().length }}</span>
+    </div>
+    @if (reports().length === 0) {
+      <p class="reports-empty">No reports found.</p>
+    } @else {
+      @for (report of reports(); track report._id) {
+        <button class="report-item" type="button" (click)="viewReport(report)">
+          <span>
+            <strong>{{ report.reason }}</strong>
+            <small>{{ reportedMessageContent(report) }}</small>
+            <small>{{ report.createdAt || 'Date unavailable' }}</small>
+          </span>
+          <span class="report-status">{{ report.status }}</span>
+        </button>
+      }
+    }
+  </section>
+
+  @if (selectedReport(); as report) {
+    <div class="modal-overlay" (click)="closeReport()">
+      <div class="modal report-modal" (click)="$event.stopPropagation()">
+        <h3>Report details</h3>
+        <p><strong>Message:</strong> {{ reportedMessageContent(report) }}</p>
+        <p><strong>Reason:</strong> {{ report.reason }}</p>
+        <p><strong>Status:</strong> {{ report.status }}</p>
+        <p><strong>Description:</strong> {{ report.description || 'No description' }}</p>
+        <button class="btn share-btn" type="button" (click)="closeReport()">Close</button>
+      </div>
+    </div>
+  }
+
   @if (showDeleteConfirm()) {
     <div class="modal-overlay" (click)="cancelDelete()">
       <div class="modal" (click)="$event.stopPropagation()">

@@ -36,6 +36,37 @@
         <span class="stat-label">Messages received</span>
         <span class="stat-value">{{ messages().length }}</span>
       </div>
+      <div class="stat-card">
+        <span class="stat-label">My reports</span>
+        <span class="stat-value">{{ reports().length }}</span>
+      </div>
+    </section>
+
+    <section class="reports-card">
+      <div class="section-heading">
+        <h4><i class="fa-solid fa-flag"></i> My reports</h4>
+        <span>{{ reports().length }} total</span>
+      </div>
+      @if (isLoadingReports()) {
+        <p class="reports-message">Loading reports...</p>
+      } @else if (reports().length === 0) {
+        <p class="reports-message">You haven't reported any messages yet.</p>
+      } @else {
+        <div class="report-list">
+          @for (report of reports(); track report._id) {
+            <div class="report-row">
+              <div class="report-details">
+                <span><i class="fa-solid fa-flag"></i> {{ report.reason || 'Reported message' }}</span>
+                <p>{{ reportedMessageContent(report) }}</p>
+              </div>
+              <div class="report-row-actions">
+                <span class="report-status" [class.resolved]="report.status === 'resolved'">{{ report.status }}</span>
+                <button class="unreport-btn" type="button" (click)="unreport(report)">Unreport</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
     </section>
     <!-- 
     <section class="trend-card">
@@ -66,15 +97,20 @@
       <input type="text" class="search-input" placeholder="Search message text..." disabled />
     </section> -->
 
-    <section class="filters-row">
+     <!-- <section class="filters-row">
       <span class="filter-pill active">All 0</span>
-      <span class="filter-pill">Unread 0</span>
+      <!-- <span class="filter-pill">Unread 0</span>
       <span class="filter-pill">Read 0</span>
       <span class="filter-pill">Featured 0</span>
       <span class="filter-pill">Pinned 0</span>
-      <span class="filter-pill">Archived 0</span>
-    </section>
+      <span class="filter-pill">Archived 0</span> 
+    </section>  -->
 
+    @if (reportError()) {
+      <p class="report-error">{{ reportError() }}</p>
+    }
+
+    <h2 class="messages-heading">All messages</h2>
    <section class="messages-list">
   @if (isLoadingMessages()) {
     <div class="loading-state">
@@ -98,6 +134,14 @@
             <i class="fa-solid fa-quote-left quote-icon"></i>
             <p class="message-content">{{ msg.content }}</p>
           </div>
+
+          <textarea
+            class="report-details-input"
+            rows="2"
+            [ngModel]="reportDescriptions()[msg._id] || ''"
+            (ngModelChange)="setReportDescription(msg._id, $event)"
+            placeholder="Add report details (optional)"
+          ></textarea>
           
           <div class="message-footer">
             <span class="message-date">
@@ -117,17 +161,32 @@
                 <i class="fa-regular fa-trash-can"></i>
               }
             </button>
+            <button
+              class="report-msg-btn"
+              type="button"
+              [class.reported]="isReported(msg._id)"
+              [disabled]="isReported(msg._id)"
+                (click)="reportMessage(msg._id, reportDescriptions()[msg._id] || '')"
+              title="Report message"
+            >
+              <i class="fa-solid fa-flag"></i>
+              {{ isReported(msg._id) ? 'Reported' : 'Report' }}
+            </button>
           </div>
         </div>
       }
     </div>
   }
 </section>
-
     @if (user.role === 'Admin') {
       <a routerLink="/admin/users" class="admin-banner">
         <i class="fa-solid fa-shield-halved"></i>
         <span>You're an admin — manage users from the admin panel</span>
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+      <a routerLink="/admin/reports" class="admin-banner reports-banner">
+        <i class="fa-solid fa-flag"></i>
+        <span>Review and manage message reports</span>
         <i class="fa-solid fa-arrow-left"></i>
       </a>
     }

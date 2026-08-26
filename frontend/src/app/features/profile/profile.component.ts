@@ -2,6 +2,10 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../core/models/user.model';
+import { Message } from '../../core/models/message.model';
+import { MessageService } from '../../core/services/message.service';
+import { Report } from '../../core/models/report.model';
+import { ReportService } from '../../core/services/report.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,12 +17,17 @@ import { User } from '../../core/models/user.model';
 export class ProfileComponent implements OnInit {
   private userService = inject(UserService);
   private authService = inject(AuthService);
+  private messageService = inject(MessageService);
+  private reportService = inject(ReportService);
 
   user = signal<User | null>(null);
   isLoading = signal(true);
   showDeleteConfirm = signal(false);
   copied = signal(false);
   shareError = signal(false);
+  reports = signal<Report[]>([]);
+  messages = signal<Message[]>([]);
+  selectedReport = signal<Report | null>(null);
 
   ngOnInit(): void {
     this.userService.getMyProfile().subscribe({
@@ -28,6 +37,38 @@ export class ProfileComponent implements OnInit {
       },
       error: () => this.isLoading.set(false),
     });
+
+    const reports$ = this.authService.currentUser()?.role === 'Admin'
+      ? this.reportService.getAllReports()
+      : this.reportService.getMyReports();
+    reports$.subscribe({ next: (reports) => this.reports.set(reports), error: () => {} });
+    this.messageService.getReceivedMessages().subscribe({
+      next: (messages) => this.messages.set(messages),
+      error: () => {},
+    });
+  }
+
+  viewReport(report: Report): void {
+    if (this.authService.currentUser()?.role === 'Admin') {
+      this.reportService.getReportDetails(report._id).subscribe({
+        next: (details) => this.selectedReport.set(details),
+        error: () => this.selectedReport.set(report),
+      });
+      return;
+    }
+    this.selectedReport.set(report);
+  }
+
+  closeReport(): void {
+    this.selectedReport.set(null);
+  }
+
+  reportedMessageContent(report: Report): string {
+    const messageId = typeof report.messageId === 'string' ? report.messageId : report.messageId._id;
+    if (typeof report.messageId !== 'string' && report.messageId.content) {
+      return report.messageId.content;
+    }
+    return this.messages().find((message) => message._id === messageId)?.content || 'Message unavailable';
   }
 
   shareProfile(): void {
