@@ -153,7 +153,7 @@ export const getReports = catchAsync(async (req, res, next) => {
     .find()
     .populate("reportedBy", "FirstName LastName ")
     .populate("messageId", "content")
-    .select("_id reason status");
+    .select("_id reason status reportedBy messageId");
   if (reports.length === 0) {
     return NotFoundException({ message: "No Reports Founded" });
   }
@@ -175,17 +175,25 @@ export const getReport = catchAsync(async (req, res, next) => {
     .findById(reportId)
     .populate("reportedBy", "FirstName LastName email")
     .populate("messageId", "content senderId receiverId createdAt")
-    .select("_id messageId reportedBy reason status");
+    .select(
+  "_id messageId reportedBy reason status actionTaken description createdAt"
+);
   if (!report) {
     return NotFoundException({ message: "Report Not Found" });
   }
 
   //if m or u deleted
-  const data = report.map((report) => ({
+  const data = {
     ...report.toObject(),
-    messageId: report.messageId ? report.messageId : "Message Deleted",
-    reportedBy: report.reportedBy ? report.reportedBy : "User Deleted",
-  }));
+
+    messageId: report.messageId
+      ? report.messageId
+      : "Message Deleted",
+
+    reportedBy: report.reportedBy
+      ? report.reportedBy
+      : "User Deleted",
+  };
   return successesResponse({
     res,
     message: "Details Of The Report",
