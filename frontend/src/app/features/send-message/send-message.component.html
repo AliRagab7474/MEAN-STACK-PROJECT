@@ -1,21 +1,31 @@
 <div class="send-page">
   @if (isLoading()) {
-    <p class="loading">Loading...</p>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading profile...</p>
+    </div>
   } @else if (notFound()) {
-    <div class="state-card">
-      <span class="state-icon"><i class="fa-solid fa-user-slash"></i></span>
+    <div class="state-card error-state">
+      <span class="state-icon error"><i class="fa-solid fa-user-slash"></i></span>
       <h2>This page doesn't exist</h2>
       <p>The link you followed may be broken, or the account no longer exists.</p>
-      <a routerLink="/" class="btn primary-btn">Go home</a>
+      <a routerLink="/" class="btn primary-btn"> <i class="fa-solid fa-arrow-left"></i> Go home </a>
     </div>
   } @else {
     <div class="receiver-card">
-      <h1>Send {{ receiverName() }} an anonymous message</h1>
-      <p class="subtitle">Your identity stays hidden. Keep it honest, kind, or useful.</p>
+      <div class="avatar-badge initials">
+        {{ receiverName()?.charAt(0) || 'U' }}
+      </div>
+      <h1>
+        Send <span>{{ receiverName() }}</span> an anonymous message
+      </h1>
+      <p class="subtitle">
+        Your identity stays completely hidden. Keep it honest, kind, or useful.
+      </p>
     </div>
 
     @if (!authService.isLoggedIn()) {
-      <div class="auth-required-card">
+      <div class="state-card auth-required-card">
         <span class="state-icon"><i class="fa-solid fa-lock"></i></span>
         <h3>Log in to send a message</h3>
         <p>You need an account to send anonymous messages on Sarhne.</p>
@@ -26,27 +36,41 @@
       </div>
     } @else if (sent()) {
       <div class="state-card success">
-        <span class="state-icon"><i class="fa-solid fa-circle-check"></i></span>
-        <h3>Message sent</h3>
+        <span class="state-icon success-icon"><i class="fa-solid fa-circle-check"></i></span>
+        <h3>Message sent!</h3>
         <p>Your anonymous message was delivered successfully.</p>
-        <button class="btn outline-btn" type="button" (click)="sent.set(false)">Send another</button>
+        <button class="btn outline-btn" type="button" (click)="sent.set(false)">
+          <i class="fa-solid fa-paper-plane"></i> Send another
+        </button>
       </div>
     } @else {
       <form class="message-form" (ngSubmit)="submit()">
-        <label for="content">Anonymous message</label>
-        <textarea
-          id="content"
-          name="content"
-          rows="6"
-          [maxlength]="maxLength"
-          [(ngModel)]="content"
-          placeholder="Write something honest, kind, or useful..."
-        ></textarea>
+        <label for="content">
+          <span>Anonymous message</span>
+          <span class="privacy-badge"
+            ><i class="fa-solid fa-shield-halved"></i> 100% Anonymous</span
+          >
+        </label>
+
+        <div class="textarea-wrapper">
+          <textarea
+            id="content"
+            name="content"
+            rows="5"
+            [maxlength]="maxLength"
+            [(ngModel)]="content"
+            placeholder="Write something honest, kind, or useful..."
+          ></textarea>
+        </div>
 
         <div class="form-footer">
-          <span class="char-count">{{ remaining }} characters remaining</span>
+          <span class="char-count" [class.limit-near]="remaining <= 20">
+            {{ remaining }} characters remaining
+          </span>
           @if (errorMsg()) {
-            <span class="error-text">{{ errorMsg() }}</span>
+            <span class="error-text"
+              ><i class="fa-solid fa-circle-exclamation"></i> {{ errorMsg() }}</span
+            >
           }
         </div>
 
@@ -55,8 +79,11 @@
           type="submit"
           [disabled]="content.trim().length < 2 || isSending()"
         >
-          <i class="fa-solid fa-paper-plane"></i>
-          {{ isSending() ? 'Sending...' : 'Send anonymously' }}
+          @if (isSending()) {
+            <span class="btn-spinner"></span> Sending...
+          } @else {
+            <i class="fa-solid fa-paper-plane"></i> Send anonymously
+          }
         </button>
       </form>
     }
