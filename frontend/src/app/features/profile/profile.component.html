@@ -43,7 +43,7 @@
       @for (report of reports(); track report._id) {
         <button class="report-item" type="button" (click)="viewReport(report)">
           <span>
-            <strong>{{ report.reason }}</strong>
+            <strong>{{ report.reason || 'Reported message' }}</strong>
             <small>{{ reportedMessageContent(report) }}</small>
             <small>{{ report.createdAt || 'Date unavailable' }}</small>
           </span>

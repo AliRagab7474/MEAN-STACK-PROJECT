@@ -15,6 +15,7 @@ import { ReportService } from '../../core/services/report.service';
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit {
+  private readonly hiddenReportsKey = 'sarhne-hidden-reports';
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private messageService = inject(MessageService);
@@ -34,18 +35,55 @@ export class ProfileComponent implements OnInit {
       next: (res) => {
         this.user.set(res);
         this.isLoading.set(false);
+        this.loadReports(res.role);
       },
       error: () => this.isLoading.set(false),
     });
+  }
 
-    const reports$ = this.authService.currentUser()?.role === 'Admin'
-      ? this.reportService.getAllReports()
-      : this.reportService.getMyReports();
-    reports$.subscribe({ next: (reports) => this.reports.set(reports), error: () => {} });
+  private loadReports(role: User['role']): void {
+    if (role === 'Admin') {
+      this.reportService.getAllReports().subscribe({
+        next: (reports) => {
+          const hiddenReports = this.getHiddenReports();
+          this.reports.set(reports.filter((report) => !hiddenReports.includes(report._id)));
+        },
+        error: () => this.reports.set([]),
+      });
+      return;
+    }
+
     this.messageService.getReceivedMessages().subscribe({
-      next: (messages) => this.messages.set(messages),
-      error: () => {},
+      next: (messages) => {
+        this.messages.set(messages);
+        const messageIds = new Set(messages.map((message) => message._id));
+        this.reportService.getMyReports().subscribe({
+          next: (reports) => {
+            const hiddenReports = this.getHiddenReports();
+            this.reports.set(reports.filter((report) =>
+              messageIds.has(this.getReportMessageId(report)) && !hiddenReports.includes(report._id)
+            ));
+          },
+          error: () => this.reports.set([]),
+        });
+      },
+      error: () => this.reports.set([]),
     });
+  }
+
+  private getReportMessageId(report: Report): string {
+    return typeof report.messageId === 'string' ? report.messageId : report.messageId._id;
+  }
+
+  private getHiddenReports(): string[] {
+    if (typeof localStorage === 'undefined') return [];
+
+    try {
+      const value = JSON.parse(localStorage.getItem(this.hiddenReportsKey) || '[]');
+      return Array.isArray(value) ? value : [];
+    } catch {
+      return [];
+    }
   }
 
   viewReport(report: Report): void {
@@ -64,7 +102,7 @@ export class ProfileComponent implements OnInit {
   }
 
   reportedMessageContent(report: Report): string {
-    const messageId = typeof report.messageId === 'string' ? report.messageId : report.messageId._id;
+    const messageId = this.getReportMessageId(report);
     if (typeof report.messageId !== 'string' && report.messageId.content) {
       return report.messageId.content;
     }
