@@ -1,12 +1,10 @@
 <nav class="app-navbar">
   <a routerLink="/" class="navbar-logo">
-  <!-- <img src="public/images/logo.png" alt="Sarhne" class="logo-img" /> -->
-  <span>Sarhne</span>
-</a>
+    <!-- <img src="public/images/logo.png" alt="Sarhne" class="logo-img" /> -->
+    <span>Sarhne</span>
+  </a>
   <div class="navbar-links">
-    <a routerLink="/" class="nav-link">
-      <i class="fa-solid fa-house"></i> Home
-    </a>
+    <a routerLink="/" class="nav-link"> <i class="fa-solid fa-house"></i> Home </a>
     <button class="nav-link logout-link" type="button" (click)="logout()">
       <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
     </button>
@@ -15,7 +13,6 @@
 
 <div class="dashboard">
   @if (authService.currentUser(); as user) {
-   
     <header class="dash-header">
       <div class="header-text">
          <h1>Dashboard</h1>
@@ -37,7 +34,7 @@
     <section class="stats-row">
       <div class="stat-card">
         <span class="stat-label">Messages received</span>
-        <span class="stat-value">0</span>
+        <span class="stat-value">{{ messages().length }}</span>
       </div>
     </section>
     <!-- 
@@ -79,14 +76,37 @@
     </section>
 
     <section class="messages-list">
-      <div class="empty-state">
-        <span class="empty-icon"><i class="fa-regular fa-envelope"></i></span>
-        <h4>Start collecting honest messages</h4>
-        <p>Visitors can already send you anonymous messages from your public page.</p>
-        <a [href]="shareLink() || '#'" target="_blank" class="btn btn-dark">
-          <i class="fa-solid fa-up-right-from-square"></i> Open public page
-        </a>
-      </div>
+      @if (isLoadingMessages()) {
+        <p class="loading-text">Loading messages...</p>
+      } @else if (messages().length === 0) {
+        <div class="empty-state">
+          <span class="empty-icon"><i class="fa-regular fa-envelope"></i></span>
+          <h4>Start collecting honest messages</h4>
+          <p>Visitors can already send you anonymous messages from your public page.</p>
+          <a [href]="shareLink() || '#'" target="_blank" class="btn btn-dark">
+            <i class="fa-solid fa-up-right-from-square"></i> Open public page
+          </a>
+        </div>
+      } @else {
+        <div class="message-cards">
+          @for (msg of messages(); track msg._id) {
+            <div class="message-item">
+              <p>{{ msg.content }}</p>
+              <div class="message-footer">
+                <span class="message-date">{{ msg.createdAt | date: 'MMM d, y, h:mm a' }}</span>
+                <button
+                  class="delete-msg-btn"
+                  type="button"
+                  [disabled]="deletingId() === msg._id"
+                  (click)="deleteMessage(msg._id)"
+                >
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
     </section>
 
     @if (user.role === 'Admin') {

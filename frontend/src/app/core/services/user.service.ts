@@ -26,13 +26,13 @@ export class UserService {
       .pipe(map((res) => res.data));
   }
 
-  getSharedProfile(email: string): Observable<Pick<User, 'FirstName' | 'LastName' | 'Gender'>> {
-    return this.http
-      .get<ApiResponse<{ user: Pick<User, 'FirstName' | 'LastName' | 'Gender'> }>>(
-        `${BASE}/${email}/shareProfile`
-      )
-      .pipe(map((res) => res.data.user));
-  }
+  getSharedProfile(id: string): Observable<Pick<User, '_id' | 'FirstName' | 'LastName' | 'Gender'>> {
+  return this.http
+    .get<ApiResponse<{ user: Pick<User, '_id' | 'FirstName' | 'LastName' | 'Gender'> }>>(
+      `${BASE}/${id}/shareProfile`
+    )
+    .pipe(map((res) => res.data.user));
+}
 
   getAllUsers(): Observable<User[]> {
     return this.http

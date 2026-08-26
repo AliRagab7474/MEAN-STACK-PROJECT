@@ -1,1 +1,64 @@
-<p>send-message works!</p>
+<div class="send-page">
+  @if (isLoading()) {
+    <p class="loading">Loading...</p>
+  } @else if (notFound()) {
+    <div class="state-card">
+      <span class="state-icon"><i class="fa-solid fa-user-slash"></i></span>
+      <h2>This page doesn't exist</h2>
+      <p>The link you followed may be broken, or the account no longer exists.</p>
+      <a routerLink="/" class="btn primary-btn">Go home</a>
+    </div>
+  } @else {
+    <div class="receiver-card">
+      <h1>Send {{ receiverName() }} an anonymous message</h1>
+      <p class="subtitle">Your identity stays hidden. Keep it honest, kind, or useful.</p>
+    </div>
+
+    @if (!authService.isLoggedIn()) {
+      <div class="auth-required-card">
+        <span class="state-icon"><i class="fa-solid fa-lock"></i></span>
+        <h3>Log in to send a message</h3>
+        <p>You need an account to send anonymous messages on Sarhne.</p>
+        <div class="auth-actions">
+          <a routerLink="/login" class="btn primary-btn">Log in</a>
+          <a routerLink="/signup" class="btn outline-btn">Create account</a>
+        </div>
+      </div>
+    } @else if (sent()) {
+      <div class="state-card success">
+        <span class="state-icon"><i class="fa-solid fa-circle-check"></i></span>
+        <h3>Message sent</h3>
+        <p>Your anonymous message was delivered successfully.</p>
+        <button class="btn outline-btn" type="button" (click)="sent.set(false)">Send another</button>
+      </div>
+    } @else {
+      <form class="message-form" (ngSubmit)="submit()">
+        <label for="content">Anonymous message</label>
+        <textarea
+          id="content"
+          name="content"
+          rows="6"
+          [maxlength]="maxLength"
+          [(ngModel)]="content"
+          placeholder="Write something honest, kind, or useful..."
+        ></textarea>
+
+        <div class="form-footer">
+          <span class="char-count">{{ remaining }} characters remaining</span>
+          @if (errorMsg()) {
+            <span class="error-text">{{ errorMsg() }}</span>
+          }
+        </div>
+
+        <button
+          class="btn primary-btn submit-btn"
+          type="submit"
+          [disabled]="content.trim().length < 2 || isSending()"
+        >
+          <i class="fa-solid fa-paper-plane"></i>
+          {{ isSending() ? 'Sending...' : 'Send anonymously' }}
+        </button>
+      </form>
+    }
+  }
+</div>

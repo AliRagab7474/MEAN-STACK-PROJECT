@@ -22,6 +22,6 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'admin/users', component: UsersListComponent, canActivate: [authGuard, adminGuard] },
-  { path: 'u/:email', component: SendMessageComponent },
+  { path: 'u/:id', component: SendMessageComponent },
   { path: '**', redirectTo: '' }
 ];
