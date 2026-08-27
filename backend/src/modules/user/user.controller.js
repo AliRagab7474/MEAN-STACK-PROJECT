@@ -76,7 +76,7 @@ export const shareProfile = catchAsync(async(req,res,next)=>{
         return response.ErrorResponse({message:"You Can't Share Your Profile"})
     }
     
-    const sharedLink =  `http://localhost:4200/user/${user._id}/shareProfile`
+    const sharedLink =  `http://localhost:4200/u/${user._id}/shareProfile`
     
     return response.successesResponse({res,message:"Link Profile Is Ready",data:sharedLink})
 })

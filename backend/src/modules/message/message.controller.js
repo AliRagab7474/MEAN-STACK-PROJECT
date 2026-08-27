@@ -58,23 +58,23 @@ export const getMessageReceived = catchAsync(async (req, res, next) => {
 
 //get user sended messages
 
-export const getMessageSended = catchAsync(async (req, res, next) => {
-  const senderId = req.user._id;
-  const messages = await MessageModel.find({ senderId ,isDeleted:false})
-    .populate("receiverId", "FirstName LastName ")
-    .sort({ createdAt: -1 });
+// export const getMessageSended = catchAsync(async (req, res, next) => {
+//   const senderId = req.user._id;
+//   const messages = await MessageModel.find({ senderId })
+//     .populate("receiverId", "FirstName LastName ")
+//     .sort({ createdAt: -1 });
 
-  if (messages.length === 0) {
-    return response.NotFoundException({
-      message: "You Didn't Send Any Message",
-    });
-  }
-  return response.successesResponse({
-    res,
-    message: "Your SendedMessages Is ..",
-    data: messages,
-  });
-});
+//   if (messages.length === 0) {
+//     return response.NotFoundException({
+//       message: "You Didn't Send Any Message",
+//     });
+//   }
+//   return response.successesResponse({
+//     res,
+//     message: "Your SendedMessages Is ..",
+//     data: messages,
+//   });
+// });
 
 // delete message -- get message by id (admin) -- delete message(admin)
 
@@ -114,16 +114,16 @@ export const deleteMessage = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getMessageById = catchAsync(async (req, res, next) => {
-  const messageId = req.params.messageId;
-  const message = await findOne({
-    model: MessageModel,
-    filter: { _id: messageId },
-  });
+// export const getMessageById = catchAsync(async (req, res, next) => {
+//   const messageId = req.params.messageId;
+//   const message = await findOne({
+//     model: MessageModel,
+//     filter: { _id: messageId },
+//   });
 
-  if (!message) {
-    return response.NotFoundException({ message: "message not found" });
-  }
-  return response.successesResponse({ res, data: message });
+//   if (!message) {
+//     return response.NotFoundException({ message: "message not found" });
+//   }
+//   return response.successesResponse({ res, data: message });
   
-});
+// });

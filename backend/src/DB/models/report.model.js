@@ -17,6 +17,11 @@ const reportSchema = new mongoose.Schema(
       required: true,
     },
 
+    senderId: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+    },
+
     reason: {
       type: String,
       enum:Object.values(reportEnum),

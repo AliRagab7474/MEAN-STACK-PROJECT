@@ -58,6 +58,7 @@ export const reportMessage = catchAsync(async (req, res, next) => {
     data: {
       messageId: messageId,
       reportedBy: req.user._id,
+      senderId: message.senderId,
       description,
       reason,
     },
@@ -95,7 +96,7 @@ export const patchReport = catchAsync(async (req, res, next) => {
   if (!message) {
     return NotFoundException({ message: "message not found" });
   }
-  const userId = message.senderId;
+  const userId = report.senderId;
 
   const user = await findById({
     model: UserModel,
@@ -139,6 +140,7 @@ export const patchReport = catchAsync(async (req, res, next) => {
       });
 
     default:
+      report.actionTaken = reportActionEnum.None;
       report.status = reportStatusEnum.Dismissed;
       await report.save();
       return successesResponse({
@@ -156,7 +158,8 @@ export const getReports = catchAsync(async (req, res, next) => {
     .find()
     .populate("reportedBy", "FirstName LastName ")
     .populate("messageId", "content")
-    .select("_id reason status reportedBy messageId");
+    .populate("senderId", "email status")
+    .select("_id reason status reportedBy messageId senderId");
   if (reports.length === 0) {
     return NotFoundException({ message: "No Reports Founded" });
   }
@@ -166,6 +169,7 @@ export const getReports = catchAsync(async (req, res, next) => {
     ...report.toObject(),
     messageId: report.messageId ? report.messageId : "Message Deleted",
     reportedBy: report.reportedBy ? report.reportedBy : "User Deleted",
+    senderId: report.senderId ? report.senderId : "User Deleted",
   }));
   return successesResponse({ res, message: "All Reports", data: data });
 });
@@ -178,9 +182,8 @@ export const getReport = catchAsync(async (req, res, next) => {
     .findById(reportId)
     .populate("reportedBy", "FirstName LastName email")
     .populate("messageId", "content senderId receiverId createdAt")
-    .select(
-  "_id messageId reportedBy reason status actionTaken description createdAt"
-);
+    .populate("senderId", " email status")
+    .select("_id messageId reportedBy reason status actionTaken description createdAt senderId");
   if (!report) {
     return NotFoundException({ message: "Report Not Found" });
   }
@@ -196,6 +199,10 @@ export const getReport = catchAsync(async (req, res, next) => {
     reportedBy: report.reportedBy
       ? report.reportedBy
       : "User Deleted",
+
+    senderId: report.senderId
+      ? report.senderId
+      : "User Deleted",
   };
   return successesResponse({
     res,
@@ -209,9 +216,9 @@ export const getMyReports = catchAsync(async (req, res, next) => {
   const report = await find({
     model:reportModel,
     filter: { reportedBy: userId },
-    select:"status actionTaken messageId"
+    select:"status actionTaken messageId reason description"
   });
-  if (!report) {
+  if (report.length === 0) {
     return NotFoundException({ message: "you have no reports" });
   }
   return successesResponse({
