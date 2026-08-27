@@ -77,6 +77,8 @@ export const getMessageReceived = catchAsync(async (req, res, next) => {
 //   });
 // });
 
+
+
 // delete message -- get message by id (admin) -- delete message(admin)
 
 export const deleteMessage = catchAsync(async (req, res, next) => {
@@ -97,11 +99,11 @@ export const deleteMessage = catchAsync(async (req, res, next) => {
     req.user._id.toString() === checkMessageExist.senderId.toString();
   const isAdmin = req.user.role === RoleEnum.Admin;
 
-  if (!isSender && isReceiver && !isAdmin) {
-    return response.UnauthorizedException({
-      message: "you can not delete this message",
-    });
-  }
+  if (!isReceiver && !isAdmin) {
+  return response.UnauthorizedException({
+    message: "you can not delete this message",
+  });
+}
 
   await findOneAndUpdate({
     model: MessageModel,
@@ -114,6 +116,8 @@ export const deleteMessage = catchAsync(async (req, res, next) => {
     message: "message delete successfully",
   });
 });
+
+
 
 // export const getMessageById = catchAsync(async (req, res, next) => {
 //   const messageId = req.params.messageId;
