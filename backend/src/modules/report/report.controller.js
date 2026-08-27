@@ -6,6 +6,7 @@ import {
   findByIdAndUpdate,
   findOne,
   findOneAndDelete,
+  findOneAndUpdate,
   MessageModel,
   reportModel,
   updateOne,
@@ -106,9 +107,10 @@ export const patchReport = catchAsync(async (req, res, next) => {
 
   switch (actionTaken) {
     case reportActionEnum.Message_Deleted:
-      await findOneAndDelete({
+      await findOneAndUpdate({
         model: MessageModel,
         filter: { _id: messageId },
+        update:{isDeleted:true}
       });
       report.actionTaken = reportActionEnum.Message_Deleted;
       report.status = reportStatusEnum.Resolved;
@@ -120,9 +122,10 @@ export const patchReport = catchAsync(async (req, res, next) => {
       });
 
     case reportActionEnum.Sender_Banned:
-      await findOneAndDelete({
+      await findOneAndUpdate({
         model: MessageModel,
         filter: { _id: messageId },
+        update:{isDeleted:true}
       });
       report.actionTaken = reportActionEnum.Sender_Banned;
       report.status = reportStatusEnum.Resolved;

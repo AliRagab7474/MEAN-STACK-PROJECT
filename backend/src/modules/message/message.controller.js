@@ -1,4 +1,4 @@
-import { findOne, findOneAndDelete } from "../../DB/database.repository.js";
+import { findOne, findOneAndDelete, findOneAndUpdate } from "../../DB/database.repository.js";
 import { MessageModel } from "../../DB/models/message.model.js";
 import { UserModel } from "../../DB/models/user.model.js";
 import { catchAsync, RoleEnum, StatusEnum } from "../../utils/index.js";
@@ -42,7 +42,7 @@ export const sendMessage = catchAsync(async (req, res, next) => {
 
 export const getMessageReceived = catchAsync(async (req, res, next) => {
   const receiverId = req.user._id;
-  const messages = await MessageModel.find({ receiverId })
+  const messages = await MessageModel.find({ receiverId ,isDeleted:false})
     .select("-senderId")
     .sort({ createdAt: -1 });
 
@@ -60,7 +60,7 @@ export const getMessageReceived = catchAsync(async (req, res, next) => {
 
 export const getMessageSended = catchAsync(async (req, res, next) => {
   const senderId = req.user._id;
-  const messages = await MessageModel.find({ senderId })
+  const messages = await MessageModel.find({ senderId ,isDeleted:false})
     .populate("receiverId", "FirstName LastName ")
     .sort({ createdAt: -1 });
 
@@ -83,7 +83,7 @@ export const deleteMessage = catchAsync(async (req, res, next) => {
 
   const checkMessageExist = await findOne({
     model: MessageModel,
-    filter: { _id: messageId },
+    filter: { _id: messageId , isDeleted:false},
   });
 
   if (!checkMessageExist) {
@@ -102,9 +102,10 @@ export const deleteMessage = catchAsync(async (req, res, next) => {
     });
   }
 
-  await findOneAndDelete({
+  await findOneAndUpdate({
     model: MessageModel,
     filter: { _id: messageId },
+    update:{isDeleted:true}
   });
 
   return response.successesResponse({
