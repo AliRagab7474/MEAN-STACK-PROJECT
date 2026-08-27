@@ -128,6 +128,17 @@ export class DashboardComponent implements OnInit {
   }
 
   unreport(report: Report): void {
+    const messageId = this.getReportMessageId(report);
+    this.reportDescriptions.update((descriptions) => {
+      const nextDescriptions = { ...descriptions };
+      delete nextDescriptions[messageId];
+      return nextDescriptions;
+    });
+    this.reportReasons.update((reasons) => {
+      const nextReasons = { ...reasons };
+      delete nextReasons[messageId];
+      return nextReasons;
+    });
     this.reports.update((list) => list.filter((item) => item._id !== report._id));
     const hiddenReports = this.getHiddenReports();
     if (!hiddenReports.includes(report._id)) {
@@ -159,12 +170,16 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  private getReportMessageId(report: Report): string {
+    return typeof report.messageId === 'string' ? report.messageId : report.messageId._id;
+  }
+
   isReported(messageId: string): boolean {
     return this.reports().some((report) => this.reportMatchesMessage(report, messageId));
   }
 
   private reportMatchesMessage(report: Report, messageId: string): boolean {
-    return typeof report.messageId === 'string' ? report.messageId === messageId : report.messageId._id === messageId;
+    return this.getReportMessageId(report) === messageId;
   }
 
   reportedMessageContent(report: Report): string {

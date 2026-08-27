@@ -88,7 +88,9 @@
   cursor: pointer;
   font-weight: 700;
   font-size: 14px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .btn:hover {
@@ -111,7 +113,6 @@
   color: var(--text-muted);
   padding: 60px 0;
 }
-
 
 .modal-overlay {
   position: fixed;
@@ -188,15 +189,86 @@
   gap: 12px;
 }
 
-.reports-heading h3 { margin: 0; color: var(--text-dark); font-size: 17px; }
-.reports-heading i { color: var(--blue-600); }
-.reports-heading span { color: var(--text-muted); }
-.reports-empty { color: var(--text-muted); font-size: 13px; }
-.report-item { width: 100%; margin-top: 12px; padding: 12px 0; background: transparent; border: 0; border-top: 1px solid var(--blue-50); text-align: left; cursor: pointer; }
-.report-item > span:first-child { display: grid; gap: 4px; }
-.report-item strong { color: var(--text-dark); text-transform: capitalize; }
-.report-item small { color: var(--text-muted); }
-.report-status { color: #b45309; font-size: 13px; font-weight: 700; text-transform: capitalize; }
-.report-modal { text-align: left; }
-.report-modal h3 { text-align: center; }
-.report-modal p { margin: 12px 0; overflow-wrap: anywhere; }
+.reports-heading h3 {
+  margin: 0;
+  color: var(--text-dark);
+  font-size: 17px;
+}
+.reports-heading i {
+  color: var(--blue-600);
+}
+.reports-heading span {
+  color: var(--text-muted);
+}
+.reports-empty {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.report-item {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px 12px;
+  background: #fbfdff;
+  border: 1px solid var(--blue-50);
+  border-radius: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+.report-item:hover {
+  background: #f4f8ff;
+  border-color: var(--blue-100);
+  transform: translateY(-1px);
+}
+.report-item:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+.report-item > span:first-child {
+  display: grid;
+  gap: 4px;
+}
+.report-item strong {
+  color: var(--text-dark);
+  text-transform: capitalize;
+}
+.report-item small {
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.report-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--blue-600) !important;
+  font-size: 11px;
+  font-weight: 700;
+}
+.report-item-side {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.report-status {
+  color: #b45309;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.report-arrow {
+  color: var(--blue-400);
+  font-size: 11px;
+}
+.report-modal {
+  text-align: left;
+}
+.report-modal h3 {
+  text-align: center;
+}
+.report-modal p {
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+}

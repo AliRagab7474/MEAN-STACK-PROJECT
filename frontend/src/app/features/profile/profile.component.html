@@ -45,9 +45,12 @@
           <span>
             <strong>{{ report.reason || 'Reported message' }}</strong>
             <small>{{ reportedMessageContent(report) }}</small>
-            <small>{{ report.createdAt || 'Date unavailable' }}</small>
+            <small class="report-hint"><i class="fa-regular fa-eye"></i> View report details</small>
           </span>
-          <span class="report-status">{{ report.status }}</span>
+          <span class="report-item-side">
+            <span class="report-status">{{ report.status }}</span>
+            <i class="fa-solid fa-chevron-right report-arrow"></i>
+          </span>
         </button>
       }
     }
