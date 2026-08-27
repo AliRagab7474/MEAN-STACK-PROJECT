@@ -15,7 +15,7 @@
   @if (authService.currentUser(); as user) {
     <header class="dash-header">
       <div class="header-text">
-         <h1>Dashboard</h1>
+        <h1>Dashboard</h1>
         <h3>Keep every anonymous message organized and searchable.</h3>
         <p>
           Manage your inbox and track your public page performance without revealing who's behind
@@ -56,13 +56,21 @@
           @for (report of reports(); track report._id) {
             <div class="report-row">
               <div class="report-details">
-                <span><i class="fa-solid fa-flag"></i> {{ report.reason || 'Reported message' }}</span>
+                <span
+                  ><i class="fa-solid fa-flag"></i> {{ report.reason || 'Reported message' }}</span
+                >
                 <p>{{ reportedMessageContent(report) }}</p>
               </div>
               <div class="report-row-actions">
-                <span class="report-status" [class.resolved]="report.status === 'resolved'">{{ report.status }}</span>
-                <button class="view-report-btn" type="button" (click)="viewReportDetails(report)">View</button>
-                <button class="unreport-btn" type="button" (click)="unreport(report)">Unreport</button>
+                <span class="report-status" [class.resolved]="report.status === 'resolved'">{{
+                  report.status
+                }}</span>
+                <button class="view-report-btn" type="button" (click)="viewReportDetails(report)">
+                  View
+                </button>
+                <button class="unreport-btn" type="button" (click)="unreport(report)">
+                  Unreport
+                </button>
               </div>
             </div>
           }
@@ -98,7 +106,7 @@
       <input type="text" class="search-input" placeholder="Search message text..." disabled />
     </section> -->
 
-     <!-- <section class="filters-row">
+    <!-- <section class="filters-row">
       <span class="filter-pill active">All 0</span>
       <!-- <span class="filter-pill">Unread 0</span>
       <span class="filter-pill">Read 0</span>
@@ -112,73 +120,128 @@
     }
 
     <h2 class="messages-heading">All messages</h2>
-   <section class="messages-list">
-  @if (isLoadingMessages()) {
-    <div class="loading-state">
-      <div class="spinner"></div>
-      <p>Loading messages...</p>
-    </div>
-  } @else if (messages().length === 0) {
-    <div class="empty-state">
-      <span class="empty-icon"><i class="fa-regular fa-envelope"></i></span>
-      <h4>Start collecting honest messages</h4>
-      <p>Visitors can already send you anonymous messages from your public page.</p>
-      <a [href]="shareLink() || '#'" target="_blank" class="btn btn-dark">
-        <i class="fa-solid fa-up-right-from-square"></i> Open public page
-      </a>
-    </div>
-  } @else {
-    <div class="message-cards">
-      @for (msg of messages(); track msg._id) {
-        <div class="message-item">
-          <div class="message-body">
-            <i class="fa-solid fa-quote-left quote-icon"></i>
-            <p class="message-content">{{ msg.content }}</p>
-          </div>
+    <section class="messages-list">
+      @if (isLoadingMessages()) {
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Loading messages...</p>
+        </div>
+      } @else if (messages().length === 0) {
+        <div class="empty-state">
+          <span class="empty-icon"><i class="fa-regular fa-envelope"></i></span>
+          <h4>Start collecting honest messages</h4>
+          <p>Visitors can already send you anonymous messages from your public page.</p>
+          <a [href]="shareLink() || '#'" target="_blank" class="btn btn-dark">
+            <i class="fa-solid fa-up-right-from-square"></i> Open public page
+          </a>
+        </div>
+      } @else {
+        <div class="message-cards">
+          @for (msg of messages(); track msg._id) {
+            <div class="message-item">
+              <div class="message-body">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p class="message-content">{{ msg.content }}</p>
+              </div>
 
-          <textarea
-            class="report-details-input"
-            rows="2"
-            [ngModel]="reportDescriptions()[msg._id] || ''"
-            (ngModelChange)="setReportDescription(msg._id, $event)"
-            placeholder="Add report details (optional)"
-          ></textarea>
-          
-          <div class="message-footer">
-            <span class="message-date">
-              <i class="fa-regular fa-clock"></i>
-              {{ msg.createdAt | date: 'MMM d, y, h:mm a' }}
-            </span>
-            <button
-              class="delete-msg-btn"
-              type="button"
-              [disabled]="deletingId() === msg._id"
-              (click)="deleteMessage(msg._id)"
-              title="Delete message"
-            >
-              @if (deletingId() === msg._id) {
-                <span class="btn-spinner delete-spinner"></span>
-              } @else {
-                <i class="fa-regular fa-trash-can"></i>
-              }
-            </button>
-            <button
-              class="report-msg-btn"
-              type="button"
-              [class.reported]="isReported(msg._id)"
-              [disabled]="isReported(msg._id)"
-                (click)="reportMessage(msg._id, reportDescriptions()[msg._id] || '')"
-              title="Report message"
-            >
-              <i class="fa-solid fa-flag"></i>
-              {{ isReported(msg._id) ? 'Reported' : 'Report' }}
-            </button>
-          </div>
+              <textarea
+                class="report-details-input"
+                rows="2"
+                [ngModel]="reportDescriptions()[msg._id] || ''"
+                (ngModelChange)="setReportDescription(msg._id, $event)"
+                placeholder="Add report details (optional)"
+              ></textarea>
+
+              <div class="report-reasons">
+                <span class="report-reasons-label">Reason</span>
+                <label
+                  ><input
+                    type="radio"
+                    [name]="'reason-' + msg._id"
+                    [checked]="(reportReasons()[msg._id] || 'spam') === 'harassment'"
+                    (change)="setReportReason(msg._id, 'harassment')"
+                  />
+                  Harassment</label
+                >
+                <label
+                  ><input
+                    type="radio"
+                    [name]="'reason-' + msg._id"
+                    [checked]="(reportReasons()[msg._id] || 'spam') === 'hate speech'"
+                    (change)="setReportReason(msg._id, 'hate speech')"
+                  />
+                  Hate speech</label
+                >
+                <label
+                  ><input
+                    type="radio"
+                    [name]="'reason-' + msg._id"
+                    [checked]="(reportReasons()[msg._id] || 'spam') === 'spam'"
+                    (change)="setReportReason(msg._id, 'spam')"
+                  />
+                  Spam</label
+                >
+                <label
+                  ><input
+                    type="radio"
+                    [name]="'reason-' + msg._id"
+                    [checked]="(reportReasons()[msg._id] || 'spam') === 'threat'"
+                    (change)="setReportReason(msg._id, 'threat')"
+                  />
+                  Threat</label
+                >
+                <label
+                  ><input
+                    type="radio"
+                    [name]="'reason-' + msg._id"
+                    [checked]="(reportReasons()[msg._id] || 'spam') === 'other'"
+                    (change)="setReportReason(msg._id, 'other')"
+                  />
+                  Other</label
+                >
+              </div>
+
+              <div class="message-footer">
+                <span class="message-date">
+                  <i class="fa-regular fa-clock"></i>
+                  {{ msg.createdAt | date: 'MMM d, y, h:mm a' }}
+                </span>
+                <button
+                  class="delete-msg-btn"
+                  type="button"
+                  [disabled]="deletingId() === msg._id"
+                  (click)="deleteMessage(msg._id)"
+                  title="Delete message"
+                >
+                  @if (deletingId() === msg._id) {
+                    <span class="btn-spinner delete-spinner"></span>
+                  } @else {
+                    <i class="fa-regular fa-trash-can"></i>
+                  }
+                </button>
+                <button
+                  class="report-msg-btn"
+                  type="button"
+                  [class.reported]="isReported(msg._id)"
+                  [disabled]="isReported(msg._id)"
+                  (click)="
+                    reportMessage(
+                      msg._id,
+                      reportDescriptions()[msg._id] || '',
+                      reportReasons()[msg._id] || 'spam'
+                    )
+                  "
+                  title="Report message"
+                >
+                  <i class="fa-solid fa-flag"></i>
+                  {{ isReported(msg._id) ? 'Reported' : 'Report' }}
+                </button>
+              </div>
+            </div>
+          }
         </div>
       }
-    </div>
-  }
-</section>
+    </section>
     @if (user.role === 'Admin') {
       <a routerLink="/admin/users" class="admin-banner">
         <i class="fa-solid fa-shield-halved"></i>
@@ -202,6 +265,7 @@
       <h3>Report details</h3>
       <p><strong>Reason:</strong> {{ report.reason }}</p>
       <p><strong>Status:</strong> {{ report.status }}</p>
+      <p><strong>Action taken:</strong> {{ report.actionTaken || 'none' }}</p>
       <p><strong>Description:</strong> {{ report.description || 'No description added' }}</p>
       <button type="button" class="close-modal-btn" (click)="closeReportDetails()">Close</button>
     </section>

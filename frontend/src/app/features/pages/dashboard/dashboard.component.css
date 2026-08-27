@@ -714,3 +714,25 @@
   font-size: 12px;
   resize: vertical;
 }
+
+.report-reasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 0 0 14px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.report-reasons-label {
+  width: 100%;
+  color: var(--text-dark);
+  font-weight: 700;
+}
+
+.report-reasons label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}

@@ -60,6 +60,7 @@
         <p><strong>Message:</strong> {{ reportedMessageContent(report) }}</p>
         <p><strong>Reason:</strong> {{ report.reason }}</p>
         <p><strong>Status:</strong> {{ report.status }}</p>
+        <p><strong>Action taken:</strong> {{ report.actionTaken || 'none' }}</p>
         <p><strong>Description:</strong> {{ report.description || 'No description' }}</p>
         <button class="btn share-btn" type="button" (click)="closeReport()">Close</button>
       </div>

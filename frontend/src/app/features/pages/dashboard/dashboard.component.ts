@@ -35,6 +35,7 @@ export class DashboardComponent implements OnInit {
   reportingId = signal<string | null>(null);
   reportError = signal<string | null>(null);
   reportDescriptions = signal<Record<string, string>>({});
+  reportReasons = signal<Record<string, Report['reason']>>({});
   selectedReport = signal<Report | null>(null);
 
   ngOnInit(): void {
@@ -89,13 +90,18 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  reportMessage(messageId: string, description = ''): void {
+  reportMessage(messageId: string, description = '', reason: Report['reason'] = 'spam'): void {
     if (this.isReported(messageId) || this.reportingId()) return;
     this.reportError.set(null);
     this.reportingId.set(messageId);
-    this.reportService.reportMessage(messageId, 'spam', description).subscribe({
+    this.reportService.reportMessage(messageId, reason, description).subscribe({
       next: (report) => {
-        this.reports.update((list) => [...list, report]);
+        const displayedReport: Report = {
+          ...report,
+          reason: report.reason || reason,
+          description: report.description || description,
+        };
+        this.reports.update((list) => [...list, displayedReport]);
         const hiddenReports = this.getHiddenReports().filter((id) => id !== report._id);
         this.saveHiddenReports(hiddenReports);
         this.reportingId.set(null);
@@ -115,6 +121,10 @@ export class DashboardComponent implements OnInit {
 
   setReportDescription(messageId: string, description: string): void {
     this.reportDescriptions.update((descriptions) => ({ ...descriptions, [messageId]: description }));
+  }
+
+  setReportReason(messageId: string, reason: Report['reason']): void {
+    this.reportReasons.update((reasons) => ({ ...reasons, [messageId]: reason }));
   }
 
   unreport(report: Report): void {

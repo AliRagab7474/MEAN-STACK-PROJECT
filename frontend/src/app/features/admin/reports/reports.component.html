@@ -40,6 +40,7 @@
         <h2>Report details</h2>
         <p><strong>Reason:</strong> {{ report.reason }}</p>
         <p><strong>Status:</strong> {{ report.status }}</p>
+        <p><strong>Action taken:</strong> {{ report.actionTaken || 'none' }}</p>
         <p><strong>Description:</strong> {{ report.description || 'No description' }}</p>
         <p><strong>Reported message:</strong> {{ messageContent(report) }}</p>
         @if (senderEmail(report); as email) {
