@@ -52,7 +52,7 @@ export class SignupComponent {
       next: (res) => {
         this.isLoading = false;
         this.cdr.markForCheck();
-        this.router.navigate(['/confirm-email']); 
+        this.router.navigate(['/confirm-email']);
       },
       error: (err) => {
         this.isLoading = false;

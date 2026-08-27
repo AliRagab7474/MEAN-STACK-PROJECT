@@ -45,19 +45,11 @@ export const signup = catchAsync(async (req, res, next) => {
     },
   });
 
-  console.log(`\n========================================`);
-  console.log(`🔑 OTP for ${email} is: ${otp}`);
-  console.log(`========================================\n`);
-
-  try {
-    await sendEmail({
-      to: email,
-      subject: "Confirm Email",
-      html: emailTemplate({ code: otp, title: "Confirm Email" }),
-    });
-  } catch (error) {
-    console.warn("Failed to send email (check .env.development credentials), but continuing registration.");
-  }
+  await sendEmail({
+    to: email,
+    subject: "Confirm Email",
+    html: emailTemplate({ code: otp, title: "Confirm Email" }),
+  });
 
   return successesResponse({ res, data: user, status: 201 });
 });
@@ -145,20 +137,11 @@ export const forgetPassword = catchAsync(async (req, res, next) => {
   }
 
   let otp = createNumberOtp();
-  
-  console.log(`\n========================================`);
-  console.log(`🔑 OTP for ${email} is: ${otp}`);
-  console.log(`========================================\n`);
-
-  try {
-    await sendEmail({
-      to: email,
-      subject: "Forget Password",
-      html: emailTemplate({ code: otp, title: "Forget Password" }),
-    });
-  } catch (error) {
-    console.warn("Failed to send email (check .env.development credentials), but continuing.");
-  }
+  await sendEmail({
+    to: email,
+    subject: "Forget Password",
+    html: emailTemplate({ code: otp, title: "Forget Password" }),
+  });
   user.otp = await generateHash(String(otp));
   user.save()
 

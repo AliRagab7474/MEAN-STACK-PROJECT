@@ -23,6 +23,10 @@ const messageSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    isDeleted :{
+      type:Boolean,
+      default:false
+    }
   },
   {
     collection: "App_Messages",
