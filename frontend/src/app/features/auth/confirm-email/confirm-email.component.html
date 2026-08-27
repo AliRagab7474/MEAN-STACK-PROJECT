@@ -1,0 +1,27 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Confirm Email</h2>
+    <p>We have sent an OTP to your email, please enter it below.</p>
+    @if (errorMessage) { <div class="error-message">{{ errorMessage }}</div> }
+    @if (successMessage) { <div class="success-message">{{ successMessage }}</div> }
+    
+    <form [formGroup]="confirmForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" formControlName="email" placeholder="Enter your email"
+          [class.is-invalid]="confirmForm.get('email')?.invalid && confirmForm.get('email')?.touched">
+      </div>
+      <div class="form-group">
+        <label for="otp">Activation Code (OTP)</label>
+        <input type="text" id="otp" formControlName="otp" placeholder="Enter code here" style="text-align: center; letter-spacing: 2px;"
+          [class.is-invalid]="confirmForm.get('otp')?.invalid && confirmForm.get('otp')?.touched">
+      </div>
+      <button type="submit" [disabled]="isLoading || confirmForm.invalid">
+        {{ isLoading ? 'Verifying...' : 'Confirm Account' }}
+      </button>
+    </form>
+    <div class="auth-link">
+      <a routerLink="/login">Back to Login</a>
+    </div>
+  </div>
+</div>

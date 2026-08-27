@@ -1,0 +1,36 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Login</h2>
+    <p>Welcome back to our system</p>
+    @if (errorMessage) {
+      <div class="error-message">{{ errorMessage }}</div>
+    }
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" formControlName="email" placeholder="example@mail.com"
+          [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+        @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+          <small class="error-text">Please enter a valid email</small>
+        }
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" formControlName="password" placeholder="Enter password"
+          [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+          <small class="error-text">Password is required</small>
+        }
+      </div>
+      <div class="auth-link" style="text-align: left; margin-bottom: 20px; margin-top: 5px;">
+        <a routerLink="/forget-password">Forgot password?</a>
+      </div>
+      <button type="submit" [disabled]="isLoading || loginForm.invalid">
+        {{ isLoading ? 'Verifying...' : 'Login' }}
+      </button>
+    </form>
+    <div class="auth-link">
+      Don't have an account? <a routerLink="/signup">Create an account</a>
+    </div>
+  </div>
+</div>

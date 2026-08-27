@@ -1,0 +1,26 @@
+{
+  "/auth": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/user": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/message": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/report": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

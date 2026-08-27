@@ -1,0 +1,13 @@
+node_modules/
+
+# Environment variables
+.env
+.env.*
+*.env
+*.env*
+src/config/.env
+src/config/.env.development
+src/config/.env.*
+!.env.example
+
+

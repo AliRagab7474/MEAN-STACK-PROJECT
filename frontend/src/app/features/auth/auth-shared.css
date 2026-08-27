@@ -1,0 +1,192 @@
+/* ===========================
+   Color Variables
+   =========================== */
+:root {
+  --blue-950: #0a1a3c;
+  --blue-900: #10285c;
+  --blue-800: #163a7a;
+  --blue-700: #1d4fa3;
+  --blue-600: #2563eb;
+  --blue-500: #3b82f6;
+  --blue-400: #60a5fa;
+  --blue-300: #93c5fd;
+  --blue-100: #dbeafe;
+  --blue-50:  #eff6ff;
+
+  --bg-page:    #f4f8ff;
+  --text-dark:  #0f1f3d;
+  --text-muted: #5b6b8c;
+
+  --shadow-soft: 0 8px 30px rgba(29, 79, 163, 0.1);
+  --shadow-card: 0 4px 16px rgba(29, 79, 163, 0.08);
+  --radius-lg: 20px;
+  --radius-md: 14px;
+}
+
+/* ===========================
+   Shared Auth Layout
+   =========================== */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--bg-page);
+  font-family: 'Inter', system-ui, sans-serif;
+  direction: ltr;
+  padding: 30px 0;
+}
+
+.auth-card {
+  background-color: #ffffff;
+  padding: 42px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  width: 100%;
+  max-width: 440px;
+  border-top: 5px solid var(--blue-700);
+}
+
+h2 {
+  color: var(--text-dark);
+  margin-bottom: 6px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 22px;
+}
+
+p {
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 26px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ===========================
+   Forms & Inputs
+   =========================== */
+.form-group { margin-bottom: 16px; text-align: left; }
+.form-row { display: flex; gap: 14px; }
+.half-width { flex: 1; }
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--blue-300);
+  border-radius: var(--radius-md);
+  background-color: var(--blue-50);
+  color: var(--text-dark);
+  font-size: 15px;
+  font-family: 'Inter', system-ui, sans-serif;
+  outline: none;
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+}
+
+input:focus, select:focus {
+  border-color: var(--blue-600);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  background-color: #ffffff;
+}
+
+input.is-invalid, select.is-invalid {
+  border-color: #ef4444;
+  background-color: #fff5f5;
+}
+
+/* ===========================
+   Messages
+   =========================== */
+.error-text {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+.error-message {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid #fecaca;
+}
+
+.success-message {
+  background-color: #f0fdf4;
+  color: #166534;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid #bbf7d0;
+}
+
+/* ===========================
+   Buttons
+   =========================== */
+button[type="submit"] {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--blue-700), var(--blue-600));
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 12px;
+  box-shadow: var(--shadow-card);
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--blue-800), var(--blue-700));
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
+}
+
+button[type="submit"]:disabled {
+  background: var(--blue-300);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ===========================
+   Links
+   =========================== */
+.auth-link {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.auth-link a {
+  color: var(--blue-700);
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.25s;
+}
+
+.auth-link a:hover {
+  color: var(--blue-900);
+  text-decoration: underline;
+}
+
+.mb-15 { margin-bottom: 15px; }
