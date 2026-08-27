@@ -1,5 +1,5 @@
 import express from "express";
-import { deleteMessage, getMessageById, getMessageReceived, getMessageSended, sendMessage } from "./message.controller.js";
+import { deleteMessage, getMessageReceived, sendMessage } from "./message.controller.js";
 import { authorization } from "../../middlewares/authorization.js";
 import { authentication, } from "../../middlewares/authentication.middlewares.js";
 import { RoleEnum } from "../../utils/index.js";
