@@ -9,14 +9,15 @@ import * as response from "../../utils/response/index.js";
 export const sendMessage = catchAsync(async (req, res, next) => {
   const { content } = req.body;
   const { receiverId } = req.params; // who will receive message
-  const senderId = req.user._id; // who will send message
+  const sender = req.user;
+  const senderId = sender._id; // who will send message
   const receiver = await UserModel.findById(receiverId);
 
   if (!receiver) {
     return response.NotFoundException({ message: "User Not Found" });
   }
 
-  if (senderId.status === StatusEnum.Blocked) {
+  if (sender.status === StatusEnum.Blocked) {
     return response.BadRequestException({
       message: "You Can Not Send Message(you are blocked)",
     });
