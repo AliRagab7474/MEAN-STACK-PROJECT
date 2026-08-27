@@ -41,11 +41,15 @@
         <p><strong>Reason:</strong> {{ report.reason }}</p>
         <p><strong>Status:</strong> {{ report.status }}</p>
         <p><strong>Description:</strong> {{ report.description || 'No description' }}</p>
+        <p><strong>Reported message:</strong> {{ messageContent(report) }}</p>
+        @if (senderEmail(report); as email) {
+          <p><strong>Sender:</strong> {{ email }} ({{ senderStatus(report) }})</p>
+        }
         @if (report.status === 'pending') {
           <div class="modal-actions">
-            <button type="button" class="dismiss-btn" (click)="resolve(report, 'dismissed')">Dismiss</button>
-            <button type="button" class="delete-btn" (click)="resolve(report, 'message deleted')">Delete message</button>
-            <button type="button" class="ban-btn" (click)="resolve(report, 'sender banned')">Ban sender</button>
+            <button type="button" class="dismiss-btn" [disabled]="processingId() === report._id" (click)="resolve(report, 'dismissed')">Dismiss</button>
+            <button type="button" class="delete-btn" [disabled]="processingId() === report._id" (click)="resolve(report, 'message deleted')">Delete message</button>
+            <button type="button" class="ban-btn" [disabled]="processingId() === report._id" (click)="resolve(report, 'sender banned')">Ban sender</button>
           </div>
         }
       </section>

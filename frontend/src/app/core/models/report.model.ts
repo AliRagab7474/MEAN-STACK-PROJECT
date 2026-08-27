@@ -15,12 +15,14 @@ export interface ReportUserReference {
   FirstName?: string;
   LastName?: string;
   email?: string;
+  status?: string;
 }
 
 export interface Report {
   _id: string;
   messageId: string | ReportMessageReference;
   reportedBy?: string | ReportUserReference;
+  senderId?: string | ReportUserReference;
   reason: ReportReason;
   description?: string;
   status: ReportStatus;

@@ -16,6 +16,7 @@ import { ReportService } from '../../core/services/report.service';
 })
 export class ProfileComponent implements OnInit {
   private readonly hiddenReportsKey = 'sarhne-hidden-reports';
+  private readonly reportDescriptionsKey = 'sarhne-report-descriptions';
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private messageService = inject(MessageService);
@@ -46,7 +47,9 @@ export class ProfileComponent implements OnInit {
       this.reportService.getAllReports().subscribe({
         next: (reports) => {
           const hiddenReports = this.getHiddenReports();
-          this.reports.set(reports.filter((report) => !hiddenReports.includes(report._id)));
+          this.reports.set(reports
+            .map((report) => this.withSavedDescription(report))
+            .filter((report) => !hiddenReports.includes(report._id)));
         },
         error: () => this.reports.set([]),
       });
@@ -60,9 +63,11 @@ export class ProfileComponent implements OnInit {
         this.reportService.getMyReports().subscribe({
           next: (reports) => {
             const hiddenReports = this.getHiddenReports();
-            this.reports.set(reports.filter((report) =>
-              messageIds.has(this.getReportMessageId(report)) && !hiddenReports.includes(report._id)
-            ));
+            this.reports.set(reports
+              .map((report) => this.withSavedDescription(report))
+              .filter((report) =>
+                messageIds.has(this.getReportMessageId(report)) && !hiddenReports.includes(report._id)
+              ));
           },
           error: () => this.reports.set([]),
         });
@@ -86,15 +91,29 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  private withSavedDescription(report: Report): Report {
+    if (report.description) return report;
+    return { ...report, description: this.getSavedReportDescriptions()[report._id] || '' };
+  }
+
+  private getSavedReportDescriptions(): Record<string, string> {
+    if (typeof localStorage === 'undefined') return {};
+    try {
+      const value = JSON.parse(localStorage.getItem(this.reportDescriptionsKey) || '{}');
+      return value && typeof value === 'object' ? value : {};
+    } catch {
+      return {};
+    }
+  }
+
   viewReport(report: Report): void {
+    this.selectedReport.set(report);
+
     if (this.authService.currentUser()?.role === 'Admin') {
       this.reportService.getReportDetails(report._id).subscribe({
         next: (details) => this.selectedReport.set(details),
-        error: () => this.selectedReport.set(report),
       });
-      return;
     }
-    this.selectedReport.set(report);
   }
 
   closeReport(): void {

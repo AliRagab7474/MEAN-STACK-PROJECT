@@ -35,6 +35,7 @@ export class DashboardComponent implements OnInit {
   reportingId = signal<string | null>(null);
   reportError = signal<string | null>(null);
   reportDescriptions = signal<Record<string, string>>({});
+  selectedReport = signal<Report | null>(null);
 
   ngOnInit(): void {
     if (!this.authService.currentUser()) {
@@ -55,7 +56,7 @@ export class DashboardComponent implements OnInit {
           const revealedReport = reports.find((report) => this.reportMatchesMessage(report, revealMessageId));
           if (revealedReport) {
             hiddenReports = hiddenReports.filter((id) => id !== revealedReport._id);
-            localStorage.setItem(this.hiddenReportsKey, JSON.stringify(hiddenReports));
+            this.saveHiddenReports(hiddenReports);
           }
         }
 
@@ -96,7 +97,7 @@ export class DashboardComponent implements OnInit {
       next: (report) => {
         this.reports.update((list) => [...list, report]);
         const hiddenReports = this.getHiddenReports().filter((id) => id !== report._id);
-        localStorage.setItem(this.hiddenReportsKey, JSON.stringify(hiddenReports));
+        this.saveHiddenReports(hiddenReports);
         this.reportingId.set(null);
       },
       error: (error) => {
@@ -120,16 +121,31 @@ export class DashboardComponent implements OnInit {
     this.reports.update((list) => list.filter((item) => item._id !== report._id));
     const hiddenReports = this.getHiddenReports();
     if (!hiddenReports.includes(report._id)) {
-      localStorage.setItem(this.hiddenReportsKey, JSON.stringify([...hiddenReports, report._id]));
+      this.saveHiddenReports([...hiddenReports, report._id]);
     }
   }
 
+  viewReportDetails(report: Report): void {
+    this.selectedReport.set(report);
+  }
+
+  closeReportDetails(): void {
+    this.selectedReport.set(null);
+  }
+
   private getHiddenReports(): string[] {
+    if (typeof localStorage === 'undefined') return [];
     try {
       const value = JSON.parse(localStorage.getItem(this.hiddenReportsKey) || '[]');
       return Array.isArray(value) ? value : [];
     } catch {
       return [];
+    }
+  }
+
+  private saveHiddenReports(reports: string[]): void {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(this.hiddenReportsKey, JSON.stringify(reports));
     }
   }
 

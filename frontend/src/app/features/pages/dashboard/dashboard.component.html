@@ -61,6 +61,7 @@
               </div>
               <div class="report-row-actions">
                 <span class="report-status" [class.resolved]="report.status === 'resolved'">{{ report.status }}</span>
+                <button class="view-report-btn" type="button" (click)="viewReportDetails(report)">View</button>
                 <button class="unreport-btn" type="button" (click)="unreport(report)">Unreport</button>
               </div>
             </div>
@@ -194,3 +195,15 @@
     <p class="loading-text">Loading your data...</p>
   }
 </div>
+
+@if (selectedReport(); as report) {
+  <div class="modal-overlay" (click)="closeReportDetails()">
+    <section class="modal report-modal" (click)="$event.stopPropagation()">
+      <h3>Report details</h3>
+      <p><strong>Reason:</strong> {{ report.reason }}</p>
+      <p><strong>Status:</strong> {{ report.status }}</p>
+      <p><strong>Description:</strong> {{ report.description || 'No description added' }}</p>
+      <button type="button" class="close-modal-btn" (click)="closeReportDetails()">Close</button>
+    </section>
+  </div>
+}

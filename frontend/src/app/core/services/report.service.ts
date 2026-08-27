@@ -31,9 +31,15 @@ export class ReportService {
       .pipe(map((res) => res.data));
   }
 
-  updateReport(reportId: string, actionTaken: 'message deleted' | 'sender banned' | 'dismissed'): Observable<Report> {
+  resolveReport(reportId: string, actionTaken: 'message deleted' | 'sender banned'): Observable<Report> {
     return this.http
       .patch<ApiResponse<Report>>(`${BASE}/${reportId}/report-patch`, { actionTaken })
+      .pipe(map((res) => res.data));
+  }
+
+  dismissReport(reportId: string): Observable<Report> {
+    return this.http
+      .patch<ApiResponse<Report>>(`${BASE}/${reportId}/report-patch`, {})
       .pipe(map((res) => res.data));
   }
 }
