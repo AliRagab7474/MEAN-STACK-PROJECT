@@ -1,71 +1,100 @@
 @if (isLoading()) {
   <p class="loading">Loading your data...</p>
 } @else if (user(); as u) {
-  <div class="profile-card">
-    <span class="status-badge" [class.blocked]="u.status === 'Blocked'">
-      <i class="fa-solid" [class.fa-circle-check]="u.status !== 'Blocked'" [class.fa-ban]="u.status === 'Blocked'"></i>
-      {{ u.status === 'Blocked' ? 'Blocked' : 'Active' }}
-    </span>
+  <main class="profile-page">
+    <header class="page-heading">
+      <div>
+        <span class="eyebrow">Account space</span>
+        <h1>Your profile</h1>
+        <p>Manage your account and keep track of reported messages.</p>
+      </div>
+      <span class="profile-mark"><i class="fa-regular fa-user"></i></span>
+    </header>
 
-    <div class="avatar">{{ u.FirstName.charAt(0) }}{{ u.LastName.charAt(0) }}</div>
+    <div class="profile-grid">
+      <section class="profile-card">
+        <span class="status-badge" [class.blocked]="u.status === 'Blocked'">
+          <i class="fa-solid" [class.fa-circle-check]="u.status !== 'Blocked'" [class.fa-ban]="u.status === 'Blocked'"></i>
+          {{ u.status === 'Blocked' ? 'Blocked' : 'Active' }}
+        </span>
 
-    <h2>{{ u.FirstName }} {{ u.LastName }}</h2>
-    <p class="email"><i class="fa-regular fa-envelope"></i> {{ u.email }}</p>
+        <div class="avatar">{{ u.FirstName.charAt(0) }}{{ u.LastName.charAt(0) }}</div>
 
-    @if (u.status === 'Blocked') {
-      <p class="blocked-notice">Your account is currently blocked</p>
-    }
+        <h2>{{ u.FirstName }} {{ u.LastName }}</h2>
+        <p class="email"><i class="fa-regular fa-envelope"></i> {{ u.email }}</p>
 
-    <div class="actions">
-      <button class="btn share-btn" (click)="shareProfile()">
-        <i class="fa-solid" [class.fa-link]="!copied()" [class.fa-check]="copied()"></i>
-        {{ copied() ? 'Link copied' : 'Share your profile' }}
-      </button>
-      <button class="btn danger-btn" (click)="openDeleteConfirm()">
-        <i class="fa-regular fa-trash-can"></i>
-        Delete account
-      </button>
+        @if (u.status === 'Blocked') {
+          <p class="blocked-notice">Your account is currently blocked</p>
+        }
+
+        <div class="actions">
+          <button class="btn share-btn" (click)="shareProfile()">
+            <i class="fa-solid" [class.fa-link]="!copied()" [class.fa-check]="copied()"></i>
+            {{ copied() ? 'Link copied' : 'Share your profile' }}
+          </button>
+          <button class="btn danger-btn" (click)="openDeleteConfirm()">
+            <i class="fa-regular fa-trash-can"></i>
+            Delete account
+          </button>
+        </div>
+
+        @if (shareError()) {
+          <p class="error-text">Couldn't share your profile right now</p>
+        }
+      </section>
+
+      <section class="reports-section">
+        <div class="reports-heading">
+          <div>
+            <span class="section-kicker">Activity</span>
+            <h2><i class="fa-solid fa-flag"></i> Reports</h2>
+          </div>
+          <span class="reports-count">{{ reports().length }}</span>
+        </div>
+        @if (reports().length === 0) {
+          <div class="reports-empty">
+            <span><i class="fa-regular fa-circle-check"></i></span>
+            <p>No reports found.</p>
+            <small>Your reported messages will appear here.</small>
+          </div>
+        } @else {
+          @for (report of reports(); track report._id) {
+            <button class="report-item" type="button" (click)="viewReport(report)">
+              <span>
+                <strong>{{ report.reason || 'Reported message' }}</strong>
+                <small>{{ reportedMessageContent(report) }}</small>
+                <small class="report-hint"><i class="fa-regular fa-eye"></i> View report details</small>
+              </span>
+              <span class="report-item-side">
+                <span class="report-status">{{ report.status }}</span>
+                <i class="fa-solid fa-chevron-right report-arrow"></i>
+              </span>
+            </button>
+          }
+        }
+      </section>
     </div>
-
-    @if (shareError()) {
-      <p class="error-text">Couldn't share your profile right now</p>
-    }
-  </div>
-
-  <section class="reports-section">
-    <div class="reports-heading">
-      <h3><i class="fa-solid fa-flag"></i> Reports</h3>
-      <span>{{ reports().length }}</span>
-    </div>
-    @if (reports().length === 0) {
-      <p class="reports-empty">No reports found.</p>
-    } @else {
-      @for (report of reports(); track report._id) {
-        <button class="report-item" type="button" (click)="viewReport(report)">
-          <span>
-            <strong>{{ report.reason || 'Reported message' }}</strong>
-            <small>{{ reportedMessageContent(report) }}</small>
-            <small class="report-hint"><i class="fa-regular fa-eye"></i> View report details</small>
-          </span>
-          <span class="report-item-side">
-            <span class="report-status">{{ report.status }}</span>
-            <i class="fa-solid fa-chevron-right report-arrow"></i>
-          </span>
-        </button>
-      }
-    }
-  </section>
+  </main>
 
   @if (selectedReport(); as report) {
     <div class="modal-overlay" (click)="closeReport()">
       <div class="modal report-modal" (click)="$event.stopPropagation()">
-        <h3>Report details</h3>
-        <p><strong>Message:</strong> {{ reportedMessageContent(report) }}</p>
-        <p><strong>Reason:</strong> {{ report.reason }}</p>
-        <p><strong>Status:</strong> {{ report.status }}</p>
-        <p><strong>Action taken:</strong> {{ report.actionTaken || 'none' }}</p>
-        <p><strong>Description:</strong> {{ report.description || 'No description' }}</p>
-        <button class="btn share-btn" type="button" (click)="closeReport()">Close</button>
+        <div class="modal-heading">
+          <span class="modal-icon report-icon"><i class="fa-solid fa-flag"></i></span>
+          <button class="modal-close" type="button" aria-label="Close report details" (click)="closeReport()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          <span class="section-kicker">Report overview</span>
+          <h3>Report details</h3>
+          <span class="report-status modal-status">{{ report.status }}</span>
+        </div>
+        <div class="report-detail-list">
+          <div class="report-detail message-detail"><span>Reported message</span><p>{{ reportedMessageContent(report) }}</p></div>
+          <div class="report-detail"><span>Reason</span><p>{{ report.reason || 'Not specified' }}</p></div>
+          <div class="report-detail"><span>Action taken</span><p>{{ report.actionTaken || 'No action yet' }}</p></div>
+          <div class="report-detail"><span>Description</span><p>{{ report.description || 'No description provided.' }}</p></div>
+        </div>
+        <button class="btn share-btn modal-button" type="button" (click)="closeReport()">Done</button>
       </div>
     </div>
   }

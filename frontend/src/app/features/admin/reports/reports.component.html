@@ -36,16 +36,56 @@
 
   @if (selectedReport(); as report) {
     <div class="modal-overlay" (click)="closeDetails()">
-      <section class="modal" (click)="$event.stopPropagation()">
-        <h2>Report details</h2>
-        <p><strong>Reason:</strong> {{ report.reason }}</p>
-        <p><strong>Status:</strong> {{ report.status }}</p>
-        <p><strong>Action taken:</strong> {{ report.actionTaken || 'none' }}</p>
-        <p><strong>Description:</strong> {{ report.description || 'No description' }}</p>
-        <p><strong>Reported message:</strong> {{ messageContent(report) }}</p>
-        @if (senderEmail(report); as email) {
-          <p><strong>Sender:</strong> {{ email }} ({{ senderStatus(report) }})</p>
-        }
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="report-details-title" (click)="$event.stopPropagation()">
+        <header class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-icon"><i class="fa-solid fa-flag"></i></span>
+            <div>
+              <p class="modal-eyebrow">Moderation review</p>
+              <h2 id="report-details-title">Report details</h2>
+            </div>
+          </div>
+          <button type="button" class="close-btn" aria-label="Close report details" (click)="closeDetails()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </header>
+
+        <div class="report-summary">
+          <div>
+            <span class="detail-label">Reported by</span>
+            <strong>{{ reporterName(report) }}</strong>
+          </div>
+          <span class="status-badge" [class.resolved]="report.status !== 'pending'">{{ report.status }}</span>
+        </div>
+
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">Reason</span>
+            <strong class="reason-value">{{ report.reason }}</strong>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Action taken</span>
+            <strong>{{ report.actionTaken || 'None yet' }}</strong>
+          </div>
+          @if (senderEmail(report); as email) {
+            <div class="detail-item detail-item-wide">
+              <span class="detail-label">Message sender</span>
+              <strong>{{ email }}</strong>
+              <small>{{ senderStatus(report) }}</small>
+            </div>
+          }
+        </div>
+
+        <div class="content-block">
+          <span class="detail-label">Reported message</span>
+          <blockquote>{{ messageContent(report) }}</blockquote>
+        </div>
+
+        <div class="content-block">
+          <span class="detail-label">Report description</span>
+          <p class="description">{{ report.description || 'No description was provided.' }}</p>
+        </div>
+
         @if (report.status === 'pending') {
           <div class="modal-actions">
             <button type="button" class="dismiss-btn" [disabled]="processingId() === report._id" (click)="resolve(report, 'dismissed')">Dismiss</button>
