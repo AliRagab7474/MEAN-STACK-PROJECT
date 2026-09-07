@@ -571,17 +571,17 @@
   display: block !important;
   position: relative;
   z-index: 51;
-  width: min(380px, 100%);
+  width: min(420px, 100%);
   max-height: calc(100vh - 40px);
   overflow-y: auto;
-  padding: 20px;
+  padding: 28px;
   background: #fff;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
 }
 
 .report-modal h3 {
-  margin: 4px 0 0;
+  margin: 6px 0 0;
   color: var(--text-dark);
   font-size: 22px;
 }
@@ -617,8 +617,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 14px;
+  gap: 16px;
+  padding-bottom: 20px;
   border-bottom: 1px solid var(--blue-50);
 }
 
@@ -652,17 +652,17 @@
 .dashboard-report-status {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 12px 0 10px;
-  padding: 10px 12px;
+  gap: 12px;
+  margin: 18px 0 12px;
+  padding: 13px 14px;
   border-radius: 11px;
   background: var(--blue-50);
 }
 
 .dashboard-report-status-icon {
   display: grid;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   place-items: center;
   border-radius: 10px;
   background: #fff;
@@ -695,7 +695,7 @@
 
 .dashboard-detail-card {
   min-width: 0;
-  padding: 10px 12px;
+  padding: 13px 14px;
   border-radius: 10px;
   background: #f8fbff;
 }
@@ -712,7 +712,7 @@
 
 .dashboard-report-done {
   width: 100%;
-  margin-top: 14px;
+  margin-top: 18px;
 }
 
 @media (max-width: 460px) {
