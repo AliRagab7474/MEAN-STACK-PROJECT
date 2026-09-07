@@ -261,13 +261,41 @@
 
 @if (selectedReport(); as report) {
   <div class="modal-overlay" (click)="closeReportDetails()">
-    <section class="modal report-modal" (click)="$event.stopPropagation()">
-      <h3>Report details</h3>
-      <p><strong>Reason:</strong> {{ report.reason }}</p>
-      <p><strong>Status:</strong> {{ report.status }}</p>
-      <p><strong>Action taken:</strong> {{ report.actionTaken || 'none' }}</p>
-      <p><strong>Description:</strong> {{ report.description || 'No description added' }}</p>
-      <button type="button" class="close-modal-btn" (click)="closeReportDetails()">Close</button>
+    <section class="modal report-modal" role="dialog" aria-modal="true" aria-labelledby="dashboard-report-title" (click)="$event.stopPropagation()">
+      <header class="dashboard-report-header">
+        <div>
+          <span class="dashboard-report-eyebrow">Report overview</span>
+          <h3 id="dashboard-report-title">Report details</h3>
+        </div>
+        <button type="button" class="dashboard-report-close" aria-label="Close report details" (click)="closeReportDetails()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </header>
+
+      <div class="dashboard-report-status">
+        <span class="dashboard-report-status-icon"><i class="fa-solid fa-flag"></i></span>
+        <div>
+          <span class="dashboard-detail-label">Current status</span>
+          <strong>{{ report.status }}</strong>
+        </div>
+      </div>
+
+      <div class="dashboard-report-details">
+        <div class="dashboard-detail-card">
+          <span class="dashboard-detail-label">Reason</span>
+          <strong>{{ report.reason || 'Not specified' }}</strong>
+        </div>
+        <div class="dashboard-detail-card">
+          <span class="dashboard-detail-label">Action taken</span>
+          <strong>{{ report.actionTaken || 'No action yet' }}</strong>
+        </div>
+        <div class="dashboard-detail-card dashboard-detail-wide">
+          <span class="dashboard-detail-label">Description</span>
+          <p>{{ report.description || 'No description added.' }}</p>
+        </div>
+      </div>
+
+      <button type="button" class="close-modal-btn dashboard-report-done" (click)="closeReportDetails()">Done</button>
     </section>
   </div>
 }
