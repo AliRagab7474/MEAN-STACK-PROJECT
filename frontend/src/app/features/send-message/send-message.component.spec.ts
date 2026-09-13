@@ -19,4 +19,9 @@ describe('SendMessageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should block public messaging for admin profiles', () => {
+    expect(component.canSendMessageToProfile({ role: 'Admin' })).toBeFalse();
+    expect(component.canSendMessageToProfile({ role: 'User' })).toBeTrue();
+  });
 });

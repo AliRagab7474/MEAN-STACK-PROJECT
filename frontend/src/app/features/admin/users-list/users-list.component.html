@@ -1,46 +1,83 @@
-<div class="admin-panel">
-  <h2>Manage Users</h2>
+<div class="admin-shell">
+  <header class="admin-topbar">
+    <div>
+      <p class="admin-kicker">Admin dashboard</p>
+      <h1>Hello {{ adminName() }}</h1>
+    </div>
 
-  @if (isLoading()) {
-    <p>Loading users...</p>
-  } @else {
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Role</th>
-          <th>Status</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (u of users(); track u._id) {
-          <tr>
-            <td>{{ u.FirstName }} {{ u.LastName }}</td>
-            <td>{{ u.email }}</td>
-            <td>{{ u.role }}</td>
-            <td>
-              <span class="badge" [class.blocked]="u.status === 'Blocked'">
-                {{ u.status === 'Blocked' ? 'Blocked' : 'Active' }}
-              </span>
-            </td>
-            <td>
-              @if (u.role !== 'Admin') {
-                <button
-                  class="btn"
-                  [class.unblock-btn]="u.status === 'Blocked'"
-                  [class.block-btn]="u.status !== 'Blocked'"
-                  [disabled]="processingId() === u._id"
-                  (click)="toggleBlock(u)"
-                >
-                  {{ processingId() === u._id ? '...' : u.status === 'Blocked' ? 'Unblock' : 'Block' }}
-                </button>
-              }
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  }
+    <nav class="admin-nav" aria-label="Admin navigation">
+      <a routerLink="/admin/users" class="nav-btn active" aria-current="page">
+        <i class="fa-solid fa-users"></i>
+        Users
+      </a>
+      <a routerLink="/admin/reports" class="nav-btn">
+        <i class="fa-solid fa-flag"></i>
+        Reports
+      </a>
+      <button type="button" class="nav-btn logout-btn" (click)="logout()">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        Logout
+      </button>
+    </nav>
+  </header>
+
+  <section class="admin-panel">
+    <div class="panel-header">
+      <div>
+        <p class="panel-label">Overview</p>
+        <h2>Manage all users</h2>
+      </div>
+      <span class="panel-badge">{{ users().length }} users</span>
+    </div>
+
+    @if (isLoading()) {
+      <div class="loading-card">
+        <div class="spinner"></div>
+        <p>Loading users...</p>
+      </div>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (u of users(); track u._id) {
+              <tr>
+                <td>{{ u.FirstName }} {{ u.LastName }}</td>
+                <td>{{ u.email }}</td>
+                <td><span class="role-pill">{{ u.role }}</span></td>
+                <td>
+                  <span class="badge" [class.blocked]="u.status === 'Blocked'">
+                    {{ u.status === 'Blocked' ? 'Blocked' : 'Active' }}
+                  </span>
+                </td>
+                <td>
+                  @if (u.role !== 'Admin') {
+                    <button
+                      class="btn"
+                      [class.unblock-btn]="u.status === 'Blocked'"
+                      [class.block-btn]="u.status !== 'Blocked'"
+                      [disabled]="processingId() === u._id"
+                      (click)="toggleBlock(u)"
+                    >
+                      {{ processingId() === u._id ? '...' : u.status === 'Blocked' ? 'Unblock' : 'Block' }}
+                    </button>
+                  } @else {
+                    <span class="admin-owner">Owner</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
 </div>

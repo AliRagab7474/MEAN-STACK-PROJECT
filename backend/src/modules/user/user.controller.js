@@ -84,10 +84,15 @@ export const shareProfile = catchAsync(async(req,res,next)=>{
 
 export const getSharedProfile = catchAsync(async (req, res, next) => {
     const { id } = req.params;
-    const user = await UserModel.findById(id).select("FirstName LastName Gender _id status")
+    const user = await UserModel.findById(id).select("FirstName LastName Gender _id status role")
     if (!user) {
         return response.NotFoundException({message:"User Not Found"})
     }
+
+    if (user.role === RoleEnum.Admin) {
+        return response.BadRequestException({message:"Admin profiles are not available for public messaging"})
+    }
+
     // if (user.status === StatusEnum.Blocked) {
     //     return response.BadRequestException({message:"This profile is not available"})
     // }

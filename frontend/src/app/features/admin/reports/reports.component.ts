@@ -1,7 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Report, ReportUserReference } from '../../../core/models/report.model';
 import { ReportService } from '../../../core/services/report.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-reports',
@@ -13,12 +14,22 @@ import { ReportService } from '../../../core/services/report.service';
 export class ReportsComponent implements OnInit {
   private readonly reportDescriptionsKey = 'sarhne-report-descriptions';
   private reportService = inject(ReportService);
+  private authService = inject(AuthService);
   reports = signal<Report[]>([]);
   selectedReport = signal<Report | null>(null);
   isLoading = signal(true);
   processingId = signal<string | null>(null);
+  adminName = computed(() => {
+    const user = this.authService.currentUser();
+    if (!user) return 'Admin';
+    const fullName = `${user.FirstName || ''} ${user.LastName || ''}`.trim();
+    return fullName || 'Admin';
+  });
 
   ngOnInit(): void {
+    if (!this.authService.currentUser()) {
+      this.authService.loadCurrentUser().subscribe();
+    }
     this.reportService.getAllReports().subscribe({
       next: (reports) => {
         this.reports.set(reports.map((report) => this.withSavedDescription(report)));
@@ -73,20 +84,24 @@ export class ReportsComponent implements OnInit {
   closeDetails(): void { this.selectedReport.set(null); }
 
   resolve(report: Report, action: 'message deleted' | 'sender banned' | 'dismissed'): void {
-  this.processingId.set(report._id);
+    this.processingId.set(report._id);
 
-  const request$ =
-    action === 'dismissed'
-      ? this.reportService.dismissReport(report._id)
-      : this.reportService.resolveReport(report._id, action);
+    const request$ =
+      action === 'dismissed'
+        ? this.reportService.dismissReport(report._id)
+        : this.reportService.resolveReport(report._id, action);
 
-  request$.subscribe({
-    next: (updated) => {
-      this.reports.update((list) => list.map((item) => (item._id === updated._id ? updated : item)));
-      this.processingId.set(null);
-      this.selectedReport.set(null);
-    },
-    error: () => this.processingId.set(null),
-  });
-}
+    request$.subscribe({
+      next: (updated) => {
+        this.reports.update((list) => list.map((item) => (item._id === updated._id ? updated : item)));
+        this.processingId.set(null);
+        this.selectedReport.set(null);
+      },
+      error: () => this.processingId.set(null),
+    });
+  }
+
+  logout(): void {
+    this.authService.logout();
+  }
 }

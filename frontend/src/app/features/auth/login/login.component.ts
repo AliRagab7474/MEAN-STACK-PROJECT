@@ -37,7 +37,9 @@ export class LoginComponent {
       next: () => {
         this.isLoading = false;
         this.cdr.markForCheck();
-        this.router.navigate(['/dashboard']);
+
+        const role = this.authService.currentUser()?.role;
+        this.router.navigate([role === 'Admin' ? '/admin/users' : '/dashboard']);
       },
       error: (err) => {
         this.isLoading = false;

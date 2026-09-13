@@ -248,18 +248,6 @@
         </div>
       }
     </section>
-    @if (user.role === 'Admin') {
-      <a routerLink="/admin/users" class="admin-banner">
-        <i class="fa-solid fa-shield-halved"></i>
-        <span>You're an admin — manage users from the admin panel</span>
-        <i class="fa-solid fa-arrow-left"></i>
-      </a>
-      <a routerLink="/admin/reports" class="admin-banner reports-banner">
-        <i class="fa-solid fa-flag"></i>
-        <span>Review and manage message reports</span>
-        <i class="fa-solid fa-arrow-left"></i>
-      </a>
-    }
   } @else {
     <p class="loading-text">Loading your data...</p>
   }
