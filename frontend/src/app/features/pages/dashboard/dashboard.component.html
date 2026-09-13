@@ -15,7 +15,8 @@
   @if (authService.currentUser(); as user) {
     <header class="dash-header">
       <div class="header-text">
-        <h1>Dashboard</h1>
+        <span class="dashboard-eyebrow">Your private space</span>
+        <h1>Hello, {{ user.FirstName }}</h1>
         <h3>Keep every anonymous message organized and searchable.</h3>
         <p>
           Manage your inbox and track your public page performance without revealing who's behind
@@ -33,10 +34,12 @@
     </header>
     <section class="stats-row">
       <div class="stat-card">
+        <span class="stat-icon messages-stat-icon"><i class="fa-regular fa-envelope"></i></span>
         <span class="stat-label">Messages received</span>
         <span class="stat-value">{{ messages().length }}</span>
       </div>
       <div class="stat-card">
+        <span class="stat-icon reports-stat-icon"><i class="fa-solid fa-flag"></i></span>
         <span class="stat-label">My reports</span>
         <span class="stat-value">{{ reports().length }}</span>
       </div>
@@ -144,6 +147,8 @@
                 <p class="message-content">{{ msg.content }}</p>
               </div>
 
+              <details class="report-options">
+                <summary><i class="fa-solid fa-sliders"></i> Add report details</summary>
               <textarea
                 class="report-details-input"
                 rows="2"
@@ -200,6 +205,7 @@
                   Other</label
                 >
               </div>
+              </details>
 
               <div class="message-footer">
                 <span class="message-date">
