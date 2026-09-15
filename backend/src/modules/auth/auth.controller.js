@@ -48,7 +48,7 @@ export const signup = catchAsync(async (req, res, next) => {
   await sendEmail({
     to: email,
     subject: "Confirm Email",
-    html: emailTemplate({ code: otp, title: "Confirm Email" }),
+    html: emailTemplate({ code: otp, title: "Confirm Email" }), 
   });
 
   return successesResponse({ res, data: user, status: 201 });

@@ -95,8 +95,8 @@ export const deleteMessage = catchAsync(async (req, res, next) => {
 
   const isReceiver =
     req.user._id.toString() === checkMessageExist.receiverId.toString();
-  const isSender =
-    req.user._id.toString() === checkMessageExist.senderId.toString();
+  // const isSender =
+  //   req.user._id.toString() === checkMessageExist.senderId.toString();
   const isAdmin = req.user.role === RoleEnum.Admin;
 
   if (!isReceiver && !isAdmin) {

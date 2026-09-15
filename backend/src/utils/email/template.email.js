@@ -1,57 +1,35 @@
 export const emailTemplate = ({ code, title }) => {
   return `<!DOCTYPE html>
-                <html>
-                <head>
-                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></head>
-                <style type="text/css">
-                body{background-color: #88BDBF;margin: 0px;}
-                </style>
-                <body style="margin:0px;"> 
-                <table border="0" width="50%" style="margin:auto;padding:30px;background-color: #F3F3F3;border:1px solid #630E2B;">
-                <tr>
-                <td>
-                <table border="0" width="100%">
-                <tr>
-                <td>
-                <h1>
-                    <img width="100px" src="https://res.cloudinary.com/ddajommsw/image/upload/v1670702280/Group_35052_icaysu.png"/>
-                </h1>
-                </td>
-                <td>
-                <p style="text-align: right;"><a href="http://localhost:4200/#/" target="_blank" style="text-decoration: none;">View In Website</a></p>
-                </td>
-                </tr>
-                </table>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                <table border="0" cellpadding="0" cellspacing="0" style="text-align:center;width:100%;background-color: #fff;">
-                <tr>
-                <td style="background-color:#630E2B;height:100px;font-size:50px;color:#fff;">
-                <img width="50px" height="50px" src="https://res.cloudinary.com/ddajommsw/image/upload/v1670703716/Screenshot_1100_yne3vo.png">
-                </td>
-                </tr>
-                <tr>
-                <td>
-                <h1 style="padding-top:25px; color:#630E2B">${title}</h1>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                <p style="padding:0px 100px;">
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body style="margin:0; padding:0; background-color:#f4f4f7; font-family: Arial, Helvetica, sans-serif;">
+    <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color:#f4f4f7; padding:40px 0;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="480" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border-radius:8px; overflow:hidden;">
+            <tr>
+              <td style="background-color:#4338CA; padding:24px; text-align:center;">
+                <h1 style="margin:0; color:#ffffff; font-size:20px;">${title}</h1>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:32px 24px; text-align:center;">
+                <p style="margin:0 0 16px 0; color:#374151; font-size:15px;">
+                         </p>
+                <p style="margin:0; display:inline-block; padding:16px 32px; background-color:#EEF2FF; color:#4338CA; font-size:32px; font-weight:bold; letter-spacing:6px; border-radius:6px;">
+                  ${code}
                 </p>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                <p style="margin:20px 0px 30px 0px;border-radius:8px;padding:20px 40px;border: 0;color:#fff;background-color:#630E2B;font-size:42px;font-weight:bold;letter-spacing:8px;display:inline-block;">${code}</p>
-                </td>
-                </tr>
-                </table>
-                </td>
-                </tr>
-                </table>
-                </body>
-                </html>`;
+                <p style="margin:24px 0 0 0; color:#9CA3AF; font-size:12px;">
+              
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
 };

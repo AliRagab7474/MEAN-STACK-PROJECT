@@ -74,6 +74,7 @@ export const reportMessage = catchAsync(async (req, res, next) => {
 
 //Update Report
 export const patchReport = catchAsync(async (req, res, next) => {
+  
   const reportId = req.params.reportId;
   const { actionTaken } = req.body || {};
 
@@ -211,6 +212,7 @@ export const getReport = catchAsync(async (req, res, next) => {
   });
 });
 
+// get my reports
 export const getMyReports = catchAsync(async (req, res, next) => {
   const userId = req.user._id;
   const report = await find({
