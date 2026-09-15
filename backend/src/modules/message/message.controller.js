@@ -17,6 +17,12 @@ export const sendMessage = catchAsync(async (req, res, next) => {
     return response.NotFoundException({ message: "User Not Found" });
   }
 
+  if (receiver.role === RoleEnum.Admin) {
+    return response.BadRequestException({
+      message: "Admin accounts cannot receive anonymous messages",
+    });
+  }
+
   if (sender.status === StatusEnum.Blocked) {
     return response.BadRequestException({
       message: "You Can Not Send Message(you are blocked)",

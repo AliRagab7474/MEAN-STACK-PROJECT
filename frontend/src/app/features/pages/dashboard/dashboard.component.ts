@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserService } from '../../../core/services/user.service';
@@ -20,6 +20,7 @@ import { DatePipe } from '@angular/common';
 export class DashboardComponent implements OnInit {
   private readonly hiddenReportsKey = 'sarhne-hidden-reports';
   authService = inject(AuthService);
+  private router = inject(Router);
   private userService = inject(UserService);
   private messageService = inject(MessageService);
   private reportService = inject(ReportService);
@@ -39,8 +40,21 @@ export class DashboardComponent implements OnInit {
   selectedReport = signal<Report | null>(null);
 
   ngOnInit(): void {
-    if (!this.authService.currentUser()) {
-      this.authService.loadCurrentUser().subscribe(() => this.buildShareLink());
+    const currentUser = this.authService.currentUser();
+
+    if (currentUser?.role === 'Admin') {
+      this.router.navigate(['/admin/users']);
+      return;
+    }
+
+    if (!currentUser) {
+      this.authService.loadCurrentUser().subscribe((user) => {
+        if (user?.role === 'Admin') {
+          this.router.navigate(['/admin/users']);
+          return;
+        }
+        this.buildShareLink();
+      });
     } else {
       this.buildShareLink();
     }

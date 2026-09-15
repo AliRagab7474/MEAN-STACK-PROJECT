@@ -1,133 +1,195 @@
-# MEAN Stack Project
+# Sara7a
 
-A full-stack web application built with the **MEAN** stack:
-- **M**ongoDB — Database
-- **E**xpress.js — Backend framework
-- **A**ngular — Frontend framework
-- **N**ode.js — Runtime environment
+Sara7a is a full-stack anonymous messaging platform that allows users to create profiles, share them with others, and receive anonymous messages.
 
-## 📁 Project Structure
+The platform also includes a reporting and moderation system that allows users to report inappropriate messages and gives administrators the ability to review reports and take appropriate actions.
 
-```
-MEAN-STACK-PROJECT/
-├── backend/          # Express.js REST API (Node.js)
-│   ├── src/
-│   ├── package.json
-│   └── .gitignore
-├── frontend/         # Angular application
-│   ├── src/
-│   ├── angular.json
-│   ├── package.json
-│   └── .gitignore
-└── README.md
-```
+## Features
 
-## 🚀 Getting Started
+### User Features
 
-### Prerequisites
+* Register and Login
+* JWT Authentication
+* View and Update Profile
+* Share Profile
+* Send Anonymous Messages
+* Receive Messages
+* Delete Received Messages
+* Report Inappropriate Messages
+* View Submitted Reports
+* Blocked users cannot send messages or share their profiles
 
-Make sure you have the following installed on your machine:
-- [Node.js](https://nodejs.org/) (LTS version recommended)
-- [Angular CLI](https://angular.dev/tools/cli) → `npm install -g @angular/cli`
-- [MongoDB](https://www.mongodb.com/try/download/community) (local or Atlas connection)
-- [Git](https://git-scm.com/)
+### Admin Features
 
-### 1. Clone the repository
+* View All Users
+* Block and Unblock Users
+* View All Reports
+* View Report Details
+* Delete Reported Messages
+* Ban Message Senders
+* Dismiss Reports
 
-```bash
-git clone https://github.com/AliRagab7474/MEAN-STACK-PROJECT.git
-cd MEAN-STACK-PROJECT
-```
+## Report System
 
-### 2. Install backend dependencies
+Users can report inappropriate messages by providing a reason and optional description.
 
-```bash
-cd backend
-npm install
-```
+Administrators can review each report and choose one of the following actions:
 
-### 3. Install frontend dependencies
+* **Delete Message** — Soft deletes the reported message.
+* **Ban Sender** — Blocks the sender and soft deletes the message.
+* **Dismiss Report** — Closes the report without taking action.
 
-```bash
-cd ../frontend
-npm install
+Reports have different statuses:
+
+```text
+Pending → Resolved
+Pending → Dismissed
 ```
 
-### 4. Environment variables
+## Technologies
 
-Inside the `backend` folder, create a `.env` file with your own configuration, for example:
+### Frontend
 
-```
-PORT=3000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-```
+* Angular
+* TypeScript
+* HTML
+* CSS
 
-> ⚠️ Never commit your `.env` file. It's already excluded via `.gitignore`.
+### Backend
 
-### 5. Run the project
+* Node.js
+* Express.js
+* JavaScript
+* Mongoose
 
-**Backend** (runs on `http://localhost:3000`):
-```bash
-cd backend
-npm run start:dev
-```
+### Database
 
-**Frontend** (default Angular CLI setup, runs on `http://localhost:4200`):
-```bash
-cd frontend
-ng serve
-```
+* MongoDB
 
-## 🔄 Git Workflow (Important)
+### Authentication & Security
 
-To avoid losing anyone's work, **always `pull` before you `add`, `commit`, or `push`.**
+* JWT
+* Role-Based Authorization
+* Protected Routes
 
-```bash
-# 1. Always start by pulling the latest changes
-git pull origin main
+### Tools
 
-# 2. Check what changed
-git status
+* Git & GitHub
+* Postman
 
-# 3. Stage your changes
-git add .
+## System Architecture
 
-# 4. Commit with a clear message
-git commit -m "Describe what you changed"
-
-# 5. Pull again before pushing (in case someone pushed while you were working)
-git pull origin main
-
-# 6. Push your changes
-git push origin main
+```text
+Angular Frontend
+       ↓
+    REST API
+       ↓
+Node.js + Express
+       ↓
+     Mongoose
+       ↓
+     MongoDB
 ```
 
-### If you get a merge conflict
-1. Open the conflicting file(s) — Git marks conflicts with `<<<<<<<`, `=======`, `>>>>>>>`.
-2. Manually decide which changes to keep.
-3. Save the file, then:
-   ```bash
-   git add .
-   git commit -m "Resolve merge conflict"
-   git push origin main
-   ```
+## Main Entities
 
-### Golden rules
-- ✅ `git pull` before you start working, and again right before `git push`.
-- ✅ Commit often with clear, descriptive messages.
-- ✅ Never push `node_modules/` or `.env` files (already handled by `.gitignore`).
-- ❌ Don't force-push (`git push -f`) unless you fully understand the consequences.
+### User
 
-## 🛠️ Tech Stack
+Stores user information, authentication data, role, and account status.
 
-| Layer      | Technology            |
-|------------|------------------------|
-| Frontend   | Angular                |
-| Backend    | Node.js + Express.js   |
-| Database   | MongoDB (Mongoose)     |
-| Validation | Zod                    |
+### Message
 
-## 📄 License
+Stores the message content, sender, receiver, creation date, and deletion status.
 
-This project is open source and available for learning purposes.
+### Report
+
+Stores the reported message, reporter, sender, reason, description, report status, and admin action.
+
+```text
+User
+ ├── sends → Message
+ ├── receives → Message
+ └── creates → Report
+
+Message
+ └── can be reported → Report
+```
+
+## Authentication & Authorization
+
+The application uses JWT-based authentication to protect private routes.
+
+Authorization is role-based:
+
+```text
+User
+ └── Access User Features
+
+Admin
+ └── Access Admin Features
+```
+
+Sensitive operations such as managing reports, blocking users, and taking moderation actions are restricted to administrators.
+
+## Soft Delete
+
+Messages are not permanently removed from the database when deleted.
+
+Instead, the system uses:
+
+```js
+isDeleted: true
+```
+
+This allows administrators to access reported message information when reviewing reports while keeping deleted messages hidden from normal users.
+
+## API Overview
+
+### Authentication
+
+```text
+POST /auth/register
+POST /auth/login
+```
+
+### Messages
+
+```text
+POST   /message/:receiverId
+GET    /message
+DELETE /message/:messageId
+```
+
+### Reports
+
+```text
+POST  /report/:messageId/report-message
+GET   /report/all-reports
+GET   /report/:reportId/get-report-details
+PATCH /report/:reportId/report-patch
+GET   /report/get-my-reports
+```
+
+### Users
+
+```text
+GET   /user/profile
+DELETE /user/profile
+GET   /user
+PATCH /user/:id/block
+PATCH /user/:id/unblock
+```
+
+## Project Goal
+
+The goal of Sara7a is to provide a simple anonymous messaging experience while maintaining a moderation system that helps administrators handle inappropriate content and manage platform users.
+
+## Team
+
+Developed as part of the **NTI MEAN Stack Training**.
+
+---
+
+## License
+
+This project is developed for educational and training purposes.

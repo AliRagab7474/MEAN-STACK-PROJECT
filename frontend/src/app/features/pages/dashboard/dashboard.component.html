@@ -15,7 +15,8 @@
   @if (authService.currentUser(); as user) {
     <header class="dash-header">
       <div class="header-text">
-        <h1>Dashboard</h1>
+        <span class="dashboard-eyebrow">Your private space</span>
+        <h1>Hello, {{ user.FirstName }}</h1>
         <h3>Keep every anonymous message organized and searchable.</h3>
         <p>
           Manage your inbox and track your public page performance without revealing who's behind
@@ -33,10 +34,12 @@
     </header>
     <section class="stats-row">
       <div class="stat-card">
+        <span class="stat-icon messages-stat-icon"><i class="fa-regular fa-envelope"></i></span>
         <span class="stat-label">Messages received</span>
         <span class="stat-value">{{ messages().length }}</span>
       </div>
       <div class="stat-card">
+        <span class="stat-icon reports-stat-icon"><i class="fa-solid fa-flag"></i></span>
         <span class="stat-label">My reports</span>
         <span class="stat-value">{{ reports().length }}</span>
       </div>
@@ -144,6 +147,8 @@
                 <p class="message-content">{{ msg.content }}</p>
               </div>
 
+              <details class="report-options">
+                <summary><i class="fa-solid fa-sliders"></i> Add report details</summary>
               <textarea
                 class="report-details-input"
                 rows="2"
@@ -200,6 +205,7 @@
                   Other</label
                 >
               </div>
+              </details>
 
               <div class="message-footer">
                 <span class="message-date">
@@ -242,18 +248,6 @@
         </div>
       }
     </section>
-    @if (user.role === 'Admin') {
-      <a routerLink="/admin/users" class="admin-banner">
-        <i class="fa-solid fa-shield-halved"></i>
-        <span>You're an admin — manage users from the admin panel</span>
-        <i class="fa-solid fa-arrow-left"></i>
-      </a>
-      <a routerLink="/admin/reports" class="admin-banner reports-banner">
-        <i class="fa-solid fa-flag"></i>
-        <span>Review and manage message reports</span>
-        <i class="fa-solid fa-arrow-left"></i>
-      </a>
-    }
   } @else {
     <p class="loading-text">Loading your data...</p>
   }
@@ -261,13 +255,41 @@
 
 @if (selectedReport(); as report) {
   <div class="modal-overlay" (click)="closeReportDetails()">
-    <section class="modal report-modal" (click)="$event.stopPropagation()">
-      <h3>Report details</h3>
-      <p><strong>Reason:</strong> {{ report.reason }}</p>
-      <p><strong>Status:</strong> {{ report.status }}</p>
-      <p><strong>Action taken:</strong> {{ report.actionTaken || 'none' }}</p>
-      <p><strong>Description:</strong> {{ report.description || 'No description added' }}</p>
-      <button type="button" class="close-modal-btn" (click)="closeReportDetails()">Close</button>
+    <section class="modal report-modal" role="dialog" aria-modal="true" aria-labelledby="dashboard-report-title" (click)="$event.stopPropagation()">
+      <header class="dashboard-report-header">
+        <div>
+          <span class="dashboard-report-eyebrow">Report overview</span>
+          <h3 id="dashboard-report-title">Report details</h3>
+        </div>
+        <button type="button" class="dashboard-report-close" aria-label="Close report details" (click)="closeReportDetails()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </header>
+
+      <div class="dashboard-report-status">
+        <span class="dashboard-report-status-icon"><i class="fa-solid fa-flag"></i></span>
+        <div>
+          <span class="dashboard-detail-label">Current status</span>
+          <strong>{{ report.status }}</strong>
+        </div>
+      </div>
+
+      <div class="dashboard-report-details">
+        <div class="dashboard-detail-card">
+          <span class="dashboard-detail-label">Reason</span>
+          <strong>{{ report.reason || 'Not specified' }}</strong>
+        </div>
+        <div class="dashboard-detail-card">
+          <span class="dashboard-detail-label">Action taken</span>
+          <strong>{{ report.actionTaken || 'No action yet' }}</strong>
+        </div>
+        <div class="dashboard-detail-card dashboard-detail-wide">
+          <span class="dashboard-detail-label">Description</span>
+          <p>{{ report.description || 'No description added.' }}</p>
+        </div>
+      </div>
+
+      <button type="button" class="close-modal-btn dashboard-report-done" (click)="closeReportDetails()">Done</button>
     </section>
   </div>
 }

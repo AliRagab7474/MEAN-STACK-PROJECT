@@ -31,6 +31,10 @@ export class SendMessageComponent implements OnInit {
   sent = signal(false);
   errorMsg = signal<string | null>(null);
 
+  canSendMessageToProfile(user: { role?: string } | null): boolean {
+    return user?.role !== 'Admin';
+  }
+
   ngOnInit(): void {
     this.receiverId = this.route.snapshot.paramMap.get('id') ?? '';
     if (!this.receiverId) {
@@ -41,6 +45,13 @@ export class SendMessageComponent implements OnInit {
 
     this.userService.getSharedProfile(this.receiverId).subscribe({
       next: (user) => {
+        if (!this.canSendMessageToProfile(user as { role?: string } | null)) {
+          this.notFound.set(true);
+          this.isLoading.set(false);
+          this.errorMsg.set('Admin profiles are not available for public messaging.');
+          return;
+        }
+
         this.receiverName.set(`${user.FirstName} ${user.LastName}`);
         this.isLoading.set(false);
       },

@@ -181,6 +181,16 @@
   color: transparent;
 }
 
+.dashboard-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--blue-600);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .header-text h3 {
   font-size: 22px;
   font-weight: 800;
@@ -227,6 +237,26 @@
   gap: 8px;
 }
 
+.stat-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  margin-bottom: 2px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.messages-stat-icon {
+  background: var(--blue-50);
+  color: var(--blue-600);
+}
+
+.reports-stat-icon {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
 .stat-label {
   font-size: 13px;
   color: var(--text-muted);
@@ -266,6 +296,7 @@
   font-size: 13px;
   color: var(--text-muted);
   font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
 .filters-row {
@@ -571,22 +602,22 @@
   display: block !important;
   position: relative;
   z-index: 51;
-  width: min(420px, 100%);
+  width: min(380px, 100%);
   max-height: calc(100vh - 40px);
   overflow-y: auto;
-  padding: 28px;
+  padding: 20px;
   background: #fff;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
 }
 
 .report-modal h3 {
-  margin: 0 0 20px;
+  margin: 6px 0 0;
   color: var(--text-dark);
+  font-size: 22px;
 }
 
 .report-modal p {
-  margin: 0 0 12px;
   color: var(--text-dark);
   font-size: 14px;
   line-height: 1.6;
@@ -611,6 +642,152 @@
 
 .close-modal-btn:hover {
   background: var(--blue-700);
+}
+
+.dashboard-report-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--blue-50);
+}
+
+.dashboard-report-eyebrow {
+  display: block;
+  color: var(--blue-600);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dashboard-report-close {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: 9px;
+  background: #f5f8fc;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.dashboard-report-close:hover {
+  background: var(--blue-50);
+  color: var(--blue-700);
+}
+
+.dashboard-report-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 10px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  background: var(--blue-50);
+}
+
+.dashboard-report-status-icon {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--blue-600);
+}
+
+.dashboard-report-status strong,
+.dashboard-detail-card strong {
+  display: block;
+  color: var(--text-dark);
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+.dashboard-detail-label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dashboard-report-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.dashboard-detail-card {
+  min-width: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f8fbff;
+}
+
+.dashboard-detail-card p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-detail-wide {
+  grid-column: 1 / -1;
+  border-left: 3px solid var(--blue-500);
+}
+
+.dashboard-report-done {
+  width: 100%;
+  margin-top: 14px;
+}
+
+@media (max-width: 640px) {
+  .dashboard {
+    margin-top: 24px;
+    padding-inline: 14px;
+  }
+
+  .header-actions,
+  .header-actions .btn {
+    width: 100%;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .report-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .report-row-actions {
+    justify-content: flex-end;
+  }
+
+  .report-modal {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 460px) {
+  .report-modal {
+    padding: 22px 18px;
+  }
+
+  .dashboard-report-details {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-detail-wide {
+    grid-column: auto;
+  }
 }
 
 .view-report-btn {
@@ -700,6 +877,34 @@
   color: #b91c1c;
   border-color: #fecaca;
   background: #fff1f2;
+}
+
+.report-options {
+  margin: 0 0 14px;
+  border: 1px solid var(--blue-50);
+  border-radius: 9px;
+  background: #fbfdff;
+}
+
+.report-options summary {
+  padding: 9px 11px;
+  color: var(--blue-700);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  list-style: none;
+}
+
+.report-options summary::-webkit-details-marker {
+  display: none;
+}
+
+.report-options summary i {
+  margin-right: 6px;
+}
+
+.report-options[open] summary {
+  border-bottom: 1px solid var(--blue-50);
 }
 
 .report-details-input {

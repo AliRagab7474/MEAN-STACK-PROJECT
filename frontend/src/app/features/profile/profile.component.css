@@ -1,6 +1,61 @@
+.profile-page {
+  width: min(100% - 40px, 980px);
+  margin: 0 auto;
+  padding: 48px 0 56px;
+}
+
+.page-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.eyebrow,
+.section-kicker {
+  display: block;
+  color: var(--blue-600);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.page-heading h1 {
+  margin: 7px 0 6px;
+  color: var(--text-dark);
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.05;
+}
+
+.page-heading p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.profile-mark {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid var(--blue-100);
+  border-radius: 16px;
+  background: var(--blue-50);
+  color: var(--blue-600);
+  font-size: 18px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.1fr);
+  align-items: start;
+  gap: 20px;
+}
+
 .profile-card {
-  max-width: 440px;
-  margin: 56px auto;
   padding: 40px 32px 32px;
   border-radius: var(--radius-lg);
   background: #fff;
@@ -172,8 +227,7 @@
 }
 
 .reports-section {
-  max-width: 440px;
-  margin: 0 auto 32px;
+  margin: 0;
   padding: 22px 24px;
   background: #fff;
   border: 1px solid var(--blue-50);
@@ -190,7 +244,7 @@
 }
 
 .reports-heading h3 {
-  margin: 0;
+  margin: 5px 0 0;
   color: var(--text-dark);
   font-size: 17px;
 }
@@ -200,9 +254,42 @@
 .reports-heading span {
   color: var(--text-muted);
 }
+.reports-count {
+  display: grid;
+  min-width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--blue-50);
+  color: var(--blue-700) !important;
+  font-weight: 800;
+}
 .reports-empty {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  padding: 48px 16px 30px;
   color: var(--text-muted);
   font-size: 13px;
+  text-align: center;
+}
+.reports-empty span {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 17px;
+}
+.reports-empty p,
+.reports-empty small {
+  margin: 0;
+}
+.reports-empty p {
+  color: var(--text-dark);
+  font-weight: 700;
 }
 .report-item {
   width: 100%;
@@ -266,9 +353,103 @@
   text-align: left;
 }
 .report-modal h3 {
-  text-align: center;
+  margin: 7px 0 10px;
+  text-align: left;
 }
 .report-modal p {
-  margin: 12px 0;
   overflow-wrap: anywhere;
+}
+
+.modal-heading {
+  position: relative;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--blue-50);
+}
+.report-icon {
+  width: 44px;
+  height: 44px;
+  margin: 0 0 16px;
+  background: var(--blue-50);
+  color: var(--blue-600);
+}
+.modal-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 9px;
+  background: #f5f8fc;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.modal-status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #fff7ed;
+}
+.report-detail-list {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+}
+.report-detail {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f8fbff;
+}
+.report-detail span {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.report-detail p {
+  color: var(--text-dark);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.message-detail {
+  border-left: 3px solid var(--blue-500);
+  background: var(--blue-50);
+}
+.modal-button {
+  width: 100%;
+}
+
+@media (max-width: 720px) {
+  .profile-page {
+    width: min(100% - 24px, 560px);
+    padding-top: 28px;
+  }
+  .page-heading {
+    align-items: flex-start;
+  }
+  .page-heading p {
+    max-width: 280px;
+    line-height: 1.5;
+  }
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+  .profile-card {
+    margin: 0;
+  }
+}
+
+@media (max-width: 460px) {
+  .profile-card,
+  .reports-section,
+  .modal {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .actions {
+    flex-direction: column;
+  }
 }

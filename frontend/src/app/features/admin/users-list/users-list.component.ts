@@ -1,23 +1,35 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { UserService } from '../../../core/services/user.service';
 import { User } from '../../../core/models/user.model';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-users-list',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.css',
 })
 export class UsersListComponent implements OnInit {
   private userService = inject(UserService);
+  private authService = inject(AuthService);
 
   users = signal<User[]>([]);
   isLoading = signal(true);
   processingId = signal<string | null>(null);
+  adminName = computed(() => {
+    const user = this.authService.currentUser();
+    if (!user) return 'Admin';
+    const fullName = `${user.FirstName || ''} ${user.LastName || ''}`.trim();
+    return fullName || 'Admin';
+  });
 
   ngOnInit(): void {
     this.loadUsers();
+    if (!this.authService.currentUser()) {
+      this.authService.loadCurrentUser().subscribe();
+    }
   }
 
   loadUsers(): void {
@@ -47,5 +59,9 @@ export class UsersListComponent implements OnInit {
       },
       error: () => this.processingId.set(null),
     });
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }
