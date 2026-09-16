@@ -63,25 +63,7 @@ export const getMessageReceived = catchAsync(async (req, res, next) => {
   });
 });
 
-//get user sended messages
 
-// export const getMessageSended = catchAsync(async (req, res, next) => {
-//   const senderId = req.user._id;
-//   const messages = await MessageModel.find({ senderId })
-//     .populate("receiverId", "FirstName LastName ")
-//     .sort({ createdAt: -1 });
-
-//   if (messages.length === 0) {
-//     return response.NotFoundException({
-//       message: "You Didn't Send Any Message",
-//     });
-//   }
-//   return response.successesResponse({
-//     res,
-//     message: "Your SendedMessages Is ..",
-//     data: messages,
-//   });
-// });
 
 
 
