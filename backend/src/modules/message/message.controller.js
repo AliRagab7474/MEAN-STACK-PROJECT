@@ -105,18 +105,3 @@ export const deleteMessage = catchAsync(async (req, res, next) => {
   });
 });
 
-
-
-// export const getMessageById = catchAsync(async (req, res, next) => {
-//   const messageId = req.params.messageId;
-//   const message = await findOne({
-//     model: MessageModel,
-//     filter: { _id: messageId },
-//   });
-
-//   if (!message) {
-//     return response.NotFoundException({ message: "message not found" });
-//   }
-//   return response.successesResponse({ res, data: message });
-  
-// });
