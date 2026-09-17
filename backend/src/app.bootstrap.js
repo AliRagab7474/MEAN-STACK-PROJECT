@@ -8,7 +8,7 @@ import { messageRouter } from "./modules/message/index.js";
 import { reportRouter } from "./modules/report/index.js";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const bootstrap = async () => {
   try {
