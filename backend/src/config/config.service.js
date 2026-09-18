@@ -1,9 +1,16 @@
 import { config } from "dotenv";
+import { existsSync } from "fs";
+
 export const NODE_ENV = process.env.NODE_ENV || "development";
+
+// Load .env file only in local development (won't exist on Vercel)
 const envPaths = {
   development: "./src/config/.env.development",
 };
-config({ path: envPaths[NODE_ENV] });
+const envPath = envPaths[NODE_ENV];
+if (envPath && existsSync(envPath)) {
+  config({ path: envPath });
+}
 
 export const port = process.env.PORT ?? 5000;
 export const MONGODB_URI = process.env.MONGODB_URI;
