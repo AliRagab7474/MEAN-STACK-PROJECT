@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  apiUrl: '',
+  production: true,
+  apiUrl: 'https://sarhne-backend-one.vercel.app',
 };

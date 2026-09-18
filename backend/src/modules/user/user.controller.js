@@ -76,7 +76,7 @@ export const shareProfile = catchAsync(async(req,res,next)=>{
         return response.ErrorResponse({message:"You Can't Share Your Profile"})
     }
     
-    const sharedLink =  `http://localhost:4200/u/${user._id}/shareProfile`
+    const sharedLink =  `http://localhost:4200/u/${user._id}`
     
     return response.successesResponse({res,message:"Link Profile Is Ready",data:sharedLink})
 })
@@ -93,8 +93,5 @@ export const getSharedProfile = catchAsync(async (req, res, next) => {
         return response.BadRequestException({message:"Admin profiles are not available for public messaging"})
     }
 
-    // if (user.status === StatusEnum.Blocked) {
-    //     return response.BadRequestException({message:"This profile is not available"})
-    // }
     return response.successesResponse({res,message: "Get Profile Successfully",data: { user },});
 });
