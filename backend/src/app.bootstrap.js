@@ -9,11 +9,6 @@ import { reportRouter } from "./modules/report/index.js";
 
 export const app = express();
 
-// Allowed origins: local dev + any Vercel deployment
-const allowedOrigins = [
-  "http://localhost:4200",
-  /\.vercel\.app$/,
-];
 
 let isDbConnected = false;
 
@@ -30,8 +25,8 @@ export const bootstrap = async () => {
 
   app.use(
     cors({
-      origin: "http://localhost:4200",
-      credentials: true
+      origin: ["https://sarhne-project.vercel.app", "http://localhost:4200"],
+      credentials: true,
     })
   );
 
