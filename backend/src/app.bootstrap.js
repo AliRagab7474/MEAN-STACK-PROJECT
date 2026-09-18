@@ -25,7 +25,7 @@ export const bootstrap = async () => {
 
   app.use(
     cors({
-      origin: ["https://sarhne-project.vercel.app", "http://localhost:4200"],
+      origin: ["https://sarhne-app.vercel.app", "http://localhost:4200"],
       credentials: true,
     })
   );
