@@ -1,57 +1,176 @@
 export const emailTemplate = ({ code, title }) => {
-  return `<!DOCTYPE html>
-                <html>
-                <head>
-                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></head>
-                <style type="text/css">
-                body{background-color: #88BDBF;margin: 0px;}
-                </style>
-                <body style="margin:0px;"> 
-                <table border="0" width="50%" style="margin:auto;padding:30px;background-color: #F3F3F3;border:1px solid #630E2B;">
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>${title}</title>
+      </head>
+
+      <body
+        style="
+          margin: 0;
+          padding: 0;
+          background-color: #f5f9ff;
+          font-family: Arial, Helvetica, sans-serif;
+          color: #0f1f3d;
+        "
+      >
+        <table
+          width="100%"
+          cellpadding="0"
+          cellspacing="0"
+          border="0"
+          style="padding: 40px 16px;"
+        >
+          <tr>
+            <td align="center">
+
+              <table
+                width="100%"
+                cellpadding="0"
+                cellspacing="0"
+                border="0"
+                style="
+                  max-width: 520px;
+                  background: #ffffff;
+                  border: 1px solid #dbeafe;
+                  border-radius: 16px;
+                  box-shadow: 0 6px 20px rgba(29, 79, 163, 0.08);
+                  overflow: hidden;
+                "
+              >
+
+                <!-- Header -->
                 <tr>
-                <td>
-                <table border="0" width="100%">
+                  <td
+                    style="
+                      padding: 26px 30px 18px;
+                      text-align: center;
+                      border-bottom: 1px solid #eff6ff;
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 26px;
+                        font-weight: 800;
+                        color: #1d4fa3;
+                        letter-spacing: -0.5px;
+                      "
+                    >
+                      Sarhne
+                    </div>
+
+                    <div
+                      style="
+                        margin-top: 6px;
+                        font-size: 13px;
+                        color: #64748b;
+                      "
+                    >
+                      Anonymous messages, made simple.
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Content -->
                 <tr>
-                <td>
-                <h1>
-                    <img width="100px" src="https://res.cloudinary.com/ddajommsw/image/upload/v1670702280/Group_35052_icaysu.png"/>
-                </h1>
-                </td>
-                <td>
-                <p style="text-align: right;"><a href="http://localhost:4200/#/" target="_blank" style="text-decoration: none;">View In Website</a></p>
-                </td>
+                  <td style="padding: 32px 30px;">
+
+                    <h1
+                      style="
+                        margin: 0 0 10px;
+                        font-size: 24px;
+                        font-weight: 800;
+                        color: #0f1f3d;
+                        text-align: center;
+                      "
+                    >
+                      ${title}
+                    </h1>
+
+                    <p
+                      style="
+                        margin: 0 auto 24px;
+                        max-width: 400px;
+                        font-size: 14px;
+                        line-height: 1.6;
+                        color: #64748b;
+                        text-align: center;
+                      "
+                    >
+                      Use the verification code below to continue.
+                    </p>
+
+                    <!-- OTP -->
+                    <div
+                      style="
+                        margin: 0 auto 24px;
+                        width: fit-content;
+                        padding: 16px 28px;
+                        background: #eff6ff;
+                        border: 1px solid #dbeafe;
+                        border-radius: 12px;
+                      "
+                    >
+                      <div
+                        style="
+                          font-size: 34px;
+                          font-weight: 800;
+                          letter-spacing: 8px;
+                          color: #1d4fa3;
+                          text-align: center;
+                        "
+                      >
+                        ${code}
+                      </div>
+                    </div>
+
+                    <p
+                      style="
+                        margin: 0;
+                        font-size: 12.5px;
+                        line-height: 1.6;
+                        color: #94a3b8;
+                        text-align: center;
+                      "
+                    >
+                      If you didn't request this code, you can safely ignore
+                      this email.
+                    </p>
+
+                  </td>
                 </tr>
-                </table>
-                </td>
-                </tr>
+
+                <!-- Footer -->
                 <tr>
-                <td>
-                <table border="0" cellpadding="0" cellspacing="0" style="text-align:center;width:100%;background-color: #fff;">
-                <tr>
-                <td style="background-color:#630E2B;height:100px;font-size:50px;color:#fff;">
-                <img width="50px" height="50px" src="https://res.cloudinary.com/ddajommsw/image/upload/v1670703716/Screenshot_1100_yne3vo.png">
-                </td>
+                  <td
+                    style="
+                      padding: 16px 24px;
+                      background: #f8fbff;
+                      border-top: 1px solid #eff6ff;
+                      text-align: center;
+                    "
+                  >
+                    <p
+                      style="
+                        margin: 0;
+                        font-size: 11px;
+                        color: #94a3b8;
+                      "
+                    >
+                      © Sarhne
+                    </p>
+                  </td>
                 </tr>
-                <tr>
-                <td>
-                <h1 style="padding-top:25px; color:#630E2B">${title}</h1>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                <p style="padding:0px 100px;">
-                </p>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                <p style="margin:20px 0px 30px 0px;border-radius:8px;padding:20px 40px;border: 0;color:#fff;background-color:#630E2B;font-size:42px;font-weight:bold;letter-spacing:8px;display:inline-block;">${code}</p>
-                </td>
-                </tr>
-                </table>
-                </td>
-                </tr>
-                </table>
-                </body>
-                </html>`;
+
+              </table>
+
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+  `;
 };
