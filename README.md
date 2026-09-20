@@ -1,6 +1,6 @@
-# Sara7a
+# Sarhne
 
-Sara7a is a full-stack anonymous messaging platform that allows users to create profiles, share them with others, and receive anonymous messages.
+Sarhne is a full-stack anonymous messaging platform that allows users to create profiles, share them with others, and receive anonymous messages.
 
 The platform also includes a reporting and moderation system that allows users to report inappropriate messages and gives administrators the ability to review reports and take appropriate actions.
 
