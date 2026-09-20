@@ -4,10 +4,17 @@
     <p>Join us now to access all features</p>
     @if (errorMessage) { <div class="error-message">{{ errorMessage }}</div> }
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" formControlName="fullName" placeholder="Enter your full name"
-          [class.is-invalid]="signupForm.get('fullName')?.invalid && signupForm.get('fullName')?.touched">
+      <div class="form-row">
+        <div class="form-group half-width">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" formControlName="firstName" placeholder="First name"
+            [class.is-invalid]="signupForm.get('firstName')?.invalid && signupForm.get('firstName')?.touched">
+        </div>
+        <div class="form-group half-width">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" formControlName="lastName" placeholder="Last name"
+            [class.is-invalid]="signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched">
+        </div>
       </div>
       <div class="form-group">
         <label for="email">Email Address</label>

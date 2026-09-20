@@ -19,7 +19,8 @@ export class SignupComponent {
   private cdr = inject(ChangeDetectorRef);
 
   signupForm: FormGroup = this.fb.group({
-    fullName: ['', [Validators.required]],
+    firstName: ['', [Validators.required]],
+    lastName: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
     phone: ['', [Validators.required]],
     age: ['', [Validators.required, Validators.min(10)]],
@@ -52,7 +53,9 @@ export class SignupComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.authService.signup(this.signupForm.value).subscribe({
+    const { firstName, lastName, ...rest } = this.signupForm.value;
+    const payload = { ...rest, fullName: `${firstName} ${lastName}`.trim() };
+    this.authService.signup(payload).subscribe({
       next: (res) => {
         this.isLoading = false;
         this.cdr.markForCheck();
