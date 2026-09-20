@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractContro
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
+import { getAuthErrorMessage } from '../auth-error-message';
 
 @Component({
   selector: 'app-signup',
@@ -23,7 +24,10 @@ export class SignupComponent {
     phone: ['', [Validators.required]],
     age: ['', [Validators.required, Validators.min(10)]],
     gender: ['', [Validators.required]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [
+      Validators.required,
+      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*.\W).{8,16}$/)
+    ]],
     confirmPassword: ['', [Validators.required]]
   }, { validators: this.passwordMatchValidator });
 
@@ -56,7 +60,7 @@ export class SignupComponent {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error?.message || err.error?.errorMessage || 'An error occurred during registration. Please try again.';
+        this.errorMessage = getAuthErrorMessage(err, 'An error occurred during registration. Please try again.', 'signup');
         this.cdr.markForCheck();
       }
     });
